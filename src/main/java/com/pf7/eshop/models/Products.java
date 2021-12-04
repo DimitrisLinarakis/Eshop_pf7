@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(callSuper = true)
+@ToString
 public class Products {
     private Integer productId;
     private String name;

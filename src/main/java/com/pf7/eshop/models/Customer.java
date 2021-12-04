@@ -10,12 +10,11 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@ToString(callSuper = true)
+@ToString
 public class Customer {
     private Integer customerID;
     private CustomerCategory customerCategory;
-    private String username;
-    private String password;
-    private Integer orderID;
+    private String name;
+    private String surname;
 
 }

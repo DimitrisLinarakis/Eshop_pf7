@@ -8,7 +8,7 @@ import lombok.ToString;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(callSuper = true)
+@ToString
 public class OrderItems {
     private Integer orderItemsID;
     private Integer productID;
