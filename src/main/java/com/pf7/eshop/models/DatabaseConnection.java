@@ -31,4 +31,9 @@ public class DatabaseConnection {
 
         return statement;
     }
+    public static void stopServer(){
+        server.stop();
+        server.shutdown();
+        logger.info("H2 server has been shutdown.");
+    }
 }
