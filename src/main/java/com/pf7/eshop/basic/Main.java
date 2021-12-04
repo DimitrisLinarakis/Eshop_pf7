@@ -15,5 +15,6 @@ public class Main {
         } catch(Exception e) {
             logger.error("Error {}", e);
         }
+        System.out.println("OK!");
     }
 }
