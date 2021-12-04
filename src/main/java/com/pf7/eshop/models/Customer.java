@@ -16,5 +16,6 @@ public class Customer {
     private CustomerCategory customerCategory;
     private String name;
     private String surname;
+    private String email;
 
 }

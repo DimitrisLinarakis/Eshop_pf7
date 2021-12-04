@@ -1,11 +1,10 @@
 package com.pf7.eshop.basic;
 
-import com.pf7.eshop.models.DatabaseConnection;
+import com.pf7.eshop.services.DatabaseService;
 import com.pf7.eshop.services.CustomerService;
 import com.pf7.eshop.services.OrderService;
 import com.pf7.eshop.services.ProductService;
 import com.pf7.eshop.services.ReportServices;
-import org.h2.tools.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Scanner;
@@ -18,7 +17,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         // hello world
         try{
-            DatabaseConnection.Connect();
+            DatabaseService.createConnection();
         } catch(Exception e) {
             logger.error("Error {}", e);
             System.exit(0);
@@ -53,13 +52,12 @@ public class Main {
                     break;
                 }
                 case 5:{
-                    DatabaseConnection.stopServer();
+                    DatabaseService.stopServer();
                     System.exit(0);
                     //stop server, shutdown
                     break;
                 }
                 default:
-                    System.out.flush();
                     logger.info("Please, give a valid category!");
                     continue;
             }
