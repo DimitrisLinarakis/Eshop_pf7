@@ -48,15 +48,15 @@ public class CustomerService {
     private void insertCustomer() {
         Customer customer = new Customer();
 
-        logger.info("Please give Customer Name:");
+        logger.info("Please give customer's name:");
         customer.setName(scanner.next());
 
-        logger.info("Please give Customer Surname:");
+        logger.info("Please give customer's surname:");
         customer.setSurname(scanner.next());
 
         boolean correctChoice = false;
         do {
-            logger.info("Please give Customer Category below: \n 1.{} \n 2.{} \n 3.{}", CustomerCategory.B2B, CustomerCategory.B2C, CustomerCategory.B2G);
+            logger.info("Please select one of the following customer categories: \n 1.{} \n 2.{} \n 3.{}", CustomerCategory.B2B, CustomerCategory.B2C, CustomerCategory.B2G);
             String choice;
             choice = scanner.next();
 
@@ -76,7 +76,7 @@ public class CustomerService {
             }
         } while (!correctChoice);
 
-        logger.info("Please give Customer Email:");
+        logger.info("Please give customer's email:");
         customer.setEmail(scanner.next());
 
         customerDAO.insert(customer);

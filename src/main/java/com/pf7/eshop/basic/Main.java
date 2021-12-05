@@ -15,7 +15,7 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        // hello world
+
         try{
             DatabaseService.createConnection();
         } catch(Exception e) {
@@ -25,7 +25,7 @@ public class Main {
 
         logger.info("=========================");
         logger.info("Welcome to Eshop");
-        logger.info("=========================");
+        logger.info("=========================\n");
 
         do{
             logger.info("Please, select category: ");
@@ -35,34 +35,31 @@ public class Main {
             logger.info("4. Reports");
             logger.info("5. Exit\n");
 
-            switch (scanner.nextInt()){
-                case 1:{
+            switch (scanner.nextInt()) {
+                case 1 -> {
                     CustomerService customerService = new CustomerService();
-                    break;}
-                case 2:{
+                }
+                case 2 -> {
                     ProductService productService = new ProductService();
-                    break;
                 }
-                case 3:{
-                   OrderService orderService = new OrderService();
-                   break;
+                case 3 -> {
+                    OrderService orderService = new OrderService();
                 }
-                case 4:{
+                case 4 -> {
                     ReportServices reportServices = new ReportServices();
-                    break;
                 }
-                case 5:{
+                case 5 -> {
+                    logger.info("We are sorry that you have to leave...Goodbye!\n");
                     DatabaseService.stopServer();
                     System.exit(0);
                     //stop server, shutdown
-                    break;
                 }
-                default:
-                    logger.info("Please, give a valid category!");
-                    continue;
+                default -> {
+                    logger.info("Please, give a valid category!\n");
+                }
             }
 
-        }while(1==1);
+        }while(true);
 
     }
 }

@@ -33,10 +33,15 @@ public class CustomerDAO  {
     }
 
     public void insert(Customer customer) {
-        try{
-        statement.executeUpdate("");
-        }catch (Exception ex){
-            logger.error("Create Customers Table Error : {}",ex.toString());
+        try {
+            statement.executeUpdate("INSERT INTO Customers " +
+                    "(CustomerCategory, Name, Surname, Email) " +
+                    "VALUES ('"+customer.getCustomerCategory()+"', " +
+                    "'"+customer.getName()+"', '"+customer.getSurname()+"', " +
+                    "'"+customer.getEmail()+"')"
+            );
+        } catch (Exception ex) {
+            logger.error("Create Customers Table Error : {}", ex.toString());
         }
     }
 
