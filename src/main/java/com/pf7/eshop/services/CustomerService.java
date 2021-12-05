@@ -35,7 +35,7 @@ public class CustomerService {
 
             switch (scanner.nextInt()) {
                 case 1 -> insertCustomer();
-                case 2 -> updateCustomer();
+//                case 2 -> updateCustomer();
                 case 3 -> deleteCustomer();
                 case 4 -> {
                     return;
@@ -48,16 +48,11 @@ public class CustomerService {
     private void insertCustomer() {
         Customer customer = new Customer();
 
-        logger.info("Please give customer's name:");
-        customer.setName(scanner.next());
-
-        logger.info("Please give customer's surname:");
-        customer.setSurname(scanner.next());
-
+        String choice;
         boolean correctChoice = false;
         do {
             logger.info("Please select one of the following customer categories: \n 1.{} \n 2.{} \n 3.{}", CustomerCategory.B2B, CustomerCategory.B2C, CustomerCategory.B2G);
-            String choice;
+
             choice = scanner.next();
 
             switch (choice) {
@@ -76,21 +71,37 @@ public class CustomerService {
             }
         } while (!correctChoice);
 
+        if (choice.equals("2") || choice.equals("B2C")) {
+            logger.info("Please give customer's name:");
+            customer.setName(scanner.next());
+
+            logger.info("Please give customer's surname:");
+            customer.setSurname(scanner.next());
+        }else{
+            logger.info("Please give business name:");
+            customer.setName(scanner.next());
+        }
+
         logger.info("Please give customer's email:");
         customer.setEmail(scanner.next());
 
         customerDAO.insert(customer);
     }
 
-    private void updateCustomer() {
-        Customer customer = new Customer();
-
-        customerDAO.update(customer);
-    }
+//    private void updateCustomer() {
+//        Customer customer = new Customer();
+//
+//        customerDAO.update(customer);
+//    }
 
     private void deleteCustomer() {
-        Customer customer = new Customer();
 
-        customerDAO.delete(customer);
+        customerDAO.showCostumersTable();
+
+        logger.info("Please give customer's ID that you want to delete: ");
+        int deletedID = scanner.nextInt();
+
+
+        customerDAO.delete(deletedID);
     }
 }
