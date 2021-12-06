@@ -4,6 +4,7 @@ import com.pf7.eshop.database.CustomerDAO;
 import com.pf7.eshop.database.ProductDAO;
 import com.pf7.eshop.models.Customer;
 import com.pf7.eshop.models.CustomerCategory;
+import com.pf7.eshop.models.Products;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,12 +39,23 @@ public class ProductService {
             }
         }while(1==1);
 
-
-
     }
 
     private void insertProduct() {
+        Products product = new Products();
+        scanner.nextLine();
+        logger.info("Insert the name of the product: ");
+        product.setName(scanner.nextLine());
 
+        while (productDAO.exists(product.getName())==true){
+            logger.info("The product that you want to insert already exists. Give another product name: ");
+            product.setName(scanner.nextLine());
+        }
+
+        logger.info("Insert the price of the product: ");
+        product.setPrice(scanner.nextBigDecimal());
+
+        productDAO.insert(product);
     }
 
 //    private void updateCustomer() {
@@ -53,7 +65,6 @@ public class ProductService {
 //    }
 
     private void deleteProduct() {
-
 
     }
 }

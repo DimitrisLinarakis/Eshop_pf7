@@ -1,5 +1,6 @@
 package com.pf7.eshop.database;
 
+import com.pf7.eshop.models.Products;
 import com.pf7.eshop.services.DatabaseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,23 +22,49 @@ public class ProductDAO {
                     ");"
             );
 
-            logger.error("Product Table Created : {}",result);
+            logger.info("Product Table Created : {}",result);
         }catch (Exception ex){
             logger.error("Create Product Table Error : {}",ex.toString());
         }
 
     }
 
-    public void insert() {
-
+    public void insert(Products product) {
+        try{
+            statement.executeUpdate("INSERT INTO Product " +
+                    "(Name, Price) " +
+                    "VALUES ('"+product.getName()+"', " +
+                    "'"+product.getPrice()+"')"
+            );
+        } catch (Exception e) {
+            logger.error("Failed to insert product's into database: {}", e.toString());
+        }
     }
 
     public void delete() {
 
     }
 
-    public void showCostumersTable() {
+    public void showProductsTable() {
 
 
+    }
+
+    public boolean exists(String productName) {
+        boolean result = false;
+
+        try{
+            ResultSet resultSet = statement.executeQuery("SELECT Name FROM Product WHERE EXISTS (SELECT Name FROM Product WHERE Name = '"+productName+"' )");
+            if(resultSet.next()){
+                result = true;
+            } else {
+                result = false;
+            }
+        } catch (Exception e) {
+            logger.error("Unable to search this product in table products: {}", e.toString());
+
+        }
+
+        return result;
     }
 }
