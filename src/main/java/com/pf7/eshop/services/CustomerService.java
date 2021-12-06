@@ -20,10 +20,9 @@ public class CustomerService {
         } catch (Exception e) {
             logger.error("Error : {}", e.toString());
         }
-        createCustomerMenu();
     }
 
-    private void createCustomerMenu() {
+    public void createCustomerMenu() {
 
         logger.info("Please, select category: ");
 
@@ -44,7 +43,7 @@ public class CustomerService {
                 }
                 default -> logger.info("Please, give a valid category!");
             }
-        } while (1 == 1);
+        } while (true);
     }
 
     private void insertCustomer() {
@@ -87,7 +86,7 @@ public class CustomerService {
         logger.info("Please give customer's email:");
         customer.setEmail(scanner.next());
 
-        while (customerDAO.customerExists(customer.getEmail()) == true){
+        while (customerDAO.customerExists(customer.getEmail())){
             logger.info("The customer that you want to insert already exists. Give another customer email: ");
             customer.setEmail(scanner.next());
         }

@@ -20,6 +20,7 @@ public class Main {
         try{
             DatabaseService.createConnection();
             StarterDAO starterDAO = new StarterDAO();
+            starterDAO.createTables();
         } catch(Exception e) {
             logger.error("Error {}", e.toString());
             System.exit(0);
@@ -40,12 +41,15 @@ public class Main {
             switch (scanner.nextInt()) {
                 case 1 -> {
                     CustomerService customerService = new CustomerService();
+                    customerService.createCustomerMenu();
                 }
                 case 2 -> {
                     ProductService productService = new ProductService();
+                    productService.createProductMenu();
                 }
                 case 3 -> {
                     OrderService orderService = new OrderService();
+                    orderService.createOrderMenu();
                 }
                 case 4 -> {
                     ReportServices reportServices = new ReportServices();

@@ -10,17 +10,20 @@ public class StarterDAO {
     private final Statement statement;
     private static final Logger logger = LoggerFactory.getLogger(StarterDAO.class);
 
-    public StarterDAO(){
+    public StarterDAO() {
         this.statement = DatabaseService.getStatement();
+    }
+
+    public void createTables() {
         createCustomersTable();
         createProductTable();
         createOrdersTable();
         createOrderItemsTable();
     }
 
-    public void createCustomersTable(){
-        try{
-            int result =  statement.executeUpdate("CREATE TABLE IF NOT EXISTS Customers(" +
+    private void createCustomersTable() {
+        try {
+            int result = statement.executeUpdate("CREATE TABLE IF NOT EXISTS Customers(" +
                     " CustomerId INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT," +
                     " CustomerCategory VARCHAR(5) NOT NULL default ''," +
                     " Name VARCHAR(20) NOT NULL default ''," +
@@ -29,30 +32,30 @@ public class StarterDAO {
                     ");"
             );
 
-            logger.error("Customers Table Created : {}",result);
-        }catch (Exception ex){
-            logger.error("Create Customers Table Error : {}",ex.toString());
+            logger.error("Customers Table Created : {}", result);
+        } catch (Exception ex) {
+            logger.error("Create Customers Table Error : {}", ex.toString());
         }
     }
 
-    public void createProductTable(){
-        try{
-            int result =  statement.executeUpdate("CREATE TABLE IF NOT EXISTS Products(" +
+    private void createProductTable() {
+        try {
+            int result = statement.executeUpdate("CREATE TABLE IF NOT EXISTS Products(" +
                     " productId INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT," +
                     " name VARCHAR(20) NOT NULL default ''," +
                     " price DECIMAL(7, 2) NOT NULL" +
                     ");"
             );
 
-            logger.info("Product Table Created : {}",result);
-        }catch (Exception ex){
-            logger.error("Create Product Table Error : {}",ex.toString());
+            logger.info("Product Table Created : {}", result);
+        } catch (Exception ex) {
+            logger.error("Create Product Table Error : {}", ex.toString());
         }
     }
 
-    public void createOrdersTable(){
-        try{
-            int result =  statement.executeUpdate("CREATE TABLE IF NOT EXISTS Orders(" +
+    private void createOrdersTable() {
+        try {
+            int result = statement.executeUpdate("CREATE TABLE IF NOT EXISTS Orders(" +
                     " orderId INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT," +
                     " productsId INTEGER, FOREIGN KEY (productsId) REFERENCES PRODUCT(PRODUCTID)," +
                     " customerId  INTEGER, FOREIGN KEY (customerId) REFERENCES CUSTOMERS(CUSTOMERID)," +
@@ -61,15 +64,15 @@ public class StarterDAO {
                     ");"
             );
 
-            logger.error("Orders Table Created : {}",result);
-        }catch (Exception ex){
-            logger.error("Create Orders Table Error : {}",ex.toString());
+            logger.error("Orders Table Created : {}", result);
+        } catch (Exception ex) {
+            logger.error("Create Orders Table Error : {}", ex.toString());
         }
     }
 
-    public void createOrderItemsTable(){
-        try{
-            int result =  statement.executeUpdate("CREATE TABLE IF NOT EXISTS OrderItems(" +
+    private void createOrderItemsTable() {
+        try {
+            int result = statement.executeUpdate("CREATE TABLE IF NOT EXISTS OrderItems(" +
                     " orderItemsId INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT," +
                     " productsId INTEGER, FOREIGN KEY (productsId) REFERENCES PRODUCTS(PRODUCTID)," +
                     " orderId INTEGER, FOREIGN KEY (orderId) REFERENCES ORDERS(ORDERID)," +
@@ -77,9 +80,9 @@ public class StarterDAO {
                     ");"
             );
 
-            logger.error("Order Items Table Created : {}",result);
-        }catch (Exception ex){
-            logger.error("Create Order Items Table Error : {}",ex.toString());
+            logger.error("Order Items Table Created : {}", result);
+        } catch (Exception ex) {
+            logger.error("Create Order Items Table Error : {}", ex.toString());
         }
     }
 }

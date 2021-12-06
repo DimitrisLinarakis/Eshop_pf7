@@ -17,10 +17,10 @@ public class ProductDAO {
 
     public void insert(Products product) {
         try{
-            statement.executeUpdate("INSERT INTO Products " +
+            statement.executeUpdate("INSERT INTO PRODUCTS " +
                     "(Name, Price) " +
-                    "VALUES ('"+product.getName()+"', " +
-                    "'"+product.getPrice()+"')"
+                    "VALUES ('" + product.getName() + "', " +
+                    "'" + product.getPrice() + "')"
             );
         } catch (Exception e) {
             logger.error("Failed to insert product's into database: {}", e.toString());

@@ -1,7 +1,7 @@
 package com.pf7.eshop.services;
 
 import com.pf7.eshop.database.OrderDAO;
-import com.pf7.eshop.models.Products;
+import com.pf7.eshop.models.Orders;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,7 +10,7 @@ import java.util.Scanner;
 public class OrderService {
     private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
     private OrderDAO orderDAO;
-    private Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner = new Scanner(System.in);
 
     public OrderService(){
         try {
@@ -18,10 +18,9 @@ public class OrderService {
         } catch (Exception e) {
             logger.error("Error : {}", e.toString());
         }
-        createOrderMenu();
     }
 
-    private void createOrderMenu() {
+    public void createOrderMenu() {
         do{
             logger.info("Please, select category: ");
             logger.info("1. Insert order.");
@@ -36,7 +35,7 @@ public class OrderService {
                 case 4 -> {return;}
                 default -> logger.info("Please give a valid category!");
             }
-        }while(1==1);
+        }while(true);
     }
 
     private void insertOrder() {

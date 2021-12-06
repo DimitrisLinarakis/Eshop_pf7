@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="SqlDialectMappings">
-    <file url="file://$PROJECT_DIR$/src/main/java/com/pf7/eshop/database/OrderDAO.java" dialect="H2" />
-    <file url="file://$PROJECT_DIR$/src/main/java/com/pf7/eshop/database/ProductDAO.java" dialect="H2" />
-    <file url="file://$PROJECT_DIR$/src/main/java/com/pf7/eshop/database/StarterDAO.java" dialect="H2" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/pf7/eshop/database/CustomerDAO.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/pf7/eshop/database/OrderDAO.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/pf7/eshop/database/ProductDAO.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/pf7/eshop/database/StarterDAO.java" dialect="GenericSQL" />
+    <file url="PROJECT" dialect="H2" />
   </component>
 </project>

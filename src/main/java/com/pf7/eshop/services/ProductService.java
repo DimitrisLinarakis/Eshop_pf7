@@ -18,10 +18,9 @@ public class ProductService {
         } catch (Exception e) {
             logger.error("Error : {}", e.toString());
         }
-        createProductMenu();
     }
 
-    private void createProductMenu() {
+    public void createProductMenu() {
         do{
             logger.info("Please, select category: ");
             logger.info("1. Insert product.");
