@@ -13,25 +13,11 @@ public class ProductDAO {
 
     public ProductDAO() {
         this.statement = DatabaseService.getStatement();
-
-        try{
-            int result =  statement.executeUpdate("CREATE TABLE IF NOT EXISTS Product(" +
-                    " productId INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT," +
-                    " name VARCHAR(20) NOT NULL default ''," +
-                    " price DECIMAL(7, 2) NOT NULL" +
-                    ");"
-            );
-
-            logger.info("Product Table Created : {}",result);
-        }catch (Exception ex){
-            logger.error("Create Product Table Error : {}",ex.toString());
-        }
-
     }
 
     public void insert(Products product) {
         try{
-            statement.executeUpdate("INSERT INTO Product " +
+            statement.executeUpdate("INSERT INTO Products " +
                     "(Name, Price) " +
                     "VALUES ('"+product.getName()+"', " +
                     "'"+product.getPrice()+"')"
@@ -44,7 +30,7 @@ public class ProductDAO {
     public void delete(int deletedID) {
 
         try{
-            int result = statement.executeUpdate("DELETE FROM Product WHERE ProductID = '"+deletedID+"' ");
+            int result = statement.executeUpdate("DELETE FROM Products WHERE ProductID = '"+deletedID+"' ");
             if(result == 1)
                 logger.info("Product successfully deleted from database");
             else
@@ -55,21 +41,17 @@ public class ProductDAO {
 
     }
 
-    public void showProductsTable() {
+    //public void showProductsTable() {
 
 
-    }
+   // }
 
     public boolean exists(String productName) {
         boolean result = false;
 
         try{
-            ResultSet resultSet = statement.executeQuery("SELECT Name FROM Product WHERE EXISTS (SELECT Name FROM Product WHERE Name = '"+productName+"' )");
-            if(resultSet.next()){
-                result = true;
-            } else {
-                result = false;
-            }
+            ResultSet resultSet = statement.executeQuery("SELECT Name FROM Products WHERE EXISTS (SELECT Name FROM Products WHERE Name = '"+productName+"' )");
+            result = resultSet.next();
         } catch (Exception e) {
             logger.error("Unable to search this product in table products: {}", e.toString());
 

@@ -10,10 +10,9 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class OrderItems {
-    private Integer orderItemsID;
-    private Integer productID;
+    private Integer orderItemsId;
+    private Integer productId;
     private Integer orderId;
     private Integer quantity;
-
 
 }

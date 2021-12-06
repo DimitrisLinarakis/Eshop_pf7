@@ -1,5 +1,6 @@
 package com.pf7.eshop.basic;
 
+import com.pf7.eshop.database.StarterDAO;
 import com.pf7.eshop.services.DatabaseService;
 import com.pf7.eshop.services.CustomerService;
 import com.pf7.eshop.services.OrderService;
@@ -18,8 +19,9 @@ public class Main {
 
         try{
             DatabaseService.createConnection();
+            StarterDAO starterDAO = new StarterDAO();
         } catch(Exception e) {
-            logger.error("Error {}", e);
+            logger.error("Error {}", e.toString());
             System.exit(0);
         }
 
@@ -54,9 +56,7 @@ public class Main {
                     System.exit(0);
                     //stop server, shutdown
                 }
-                default -> {
-                    logger.info("Please, give a valid category!\n");
-                }
+                default -> logger.info("Please, give a valid category!\n");
             }
 
         }while(true);

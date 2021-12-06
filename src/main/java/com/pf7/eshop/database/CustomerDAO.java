@@ -14,27 +14,9 @@ public class CustomerDAO  {
 
     public CustomerDAO() {
         this.statement = DatabaseService.getStatement();
-
-        try{
-            int result =  statement.executeUpdate("CREATE TABLE IF NOT EXISTS Customers(" +
-                    " CustomerId INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT," +
-                    " CustomerCategory VARCHAR(5) NOT NULL default ''," +
-                    " Name VARCHAR(20) NOT NULL default ''," +
-                    " Surname VARCHAR(20) NOT NULL default ''," +
-                    " Email VARCHAR(50) NOT NULL default ''" +
-                    ");"
-            );
-
-            logger.error("Customers Table Created : {}",result);
-        }catch (Exception ex){
-            logger.error("Create Customers Table Error : {}",ex.toString());
-        }
-
     }
 
     public void insert(Customer customer) {
-
-
         try {
             statement.executeUpdate("INSERT INTO Customers " +
                     "(CustomerCategory, Name, Surname, Email) " +
@@ -90,10 +72,7 @@ public class CustomerDAO  {
                     "EXISTS (SELECT Email FROM Customers " +
                     "WHERE Email = '"+customerEmail+"')"
             );
-            if (resultSet.next())
-                result = true;
-            else
-                result = false;
+            result = resultSet.next();
 
         }catch(Exception e){
             logger.error("Unable to search this customer in table Customers: {}", e.toString());

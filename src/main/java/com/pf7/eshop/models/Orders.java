@@ -16,5 +16,5 @@ public class Orders {
     private String productsId;
     private Integer customerId;
     private PaymentMethod paymentMethod;
-    private BigDecimal TotalPrice;
+    private BigDecimal totalPrice;
 }

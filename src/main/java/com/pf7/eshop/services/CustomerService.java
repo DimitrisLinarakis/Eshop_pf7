@@ -31,13 +31,15 @@ public class CustomerService {
             logger.info("1. Insert Customer");
             logger.info("2. Update Customer");
             logger.info("3. Delete Customer");
-            logger.info("4. Return To Menu");
+            logger.info("4. Show Customers list");
+            logger.info("5. Return To Menu");
 
             switch (scanner.nextInt()) {
                 case 1 -> insertCustomer();
 //                case 2 -> updateCustomer();
                 case 3 -> deleteCustomer();
-                case 4 -> {
+                case 4 -> customerDAO.showCostumersTable();
+                case 5 -> {
                     return;
                 }
                 default -> logger.info("Please, give a valid category!");
