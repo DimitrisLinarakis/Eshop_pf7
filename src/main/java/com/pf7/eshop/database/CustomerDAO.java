@@ -33,6 +33,8 @@ public class CustomerDAO  {
     }
 
     public void insert(Customer customer) {
+
+
         try {
             statement.executeUpdate("INSERT INTO Customers " +
                     "(CustomerCategory, Name, Surname, Email) " +
@@ -52,8 +54,11 @@ public class CustomerDAO  {
 
     public void delete(int deleteID) {
         try {
-            statement.executeUpdate("DELETE FROM Customers WHERE CUSTOMERID = '"+deleteID+"'");
-            logger.info("Customer successfully deleted from database");
+            int result = statement.executeUpdate("DELETE FROM Customers WHERE CUSTOMERID = '"+deleteID+"'");
+            if (result == 1)
+                logger.info("Customer successfully deleted from database");
+            else
+                logger.info("Customer not found");
         } catch (Exception ex) {
             logger.error("Failed to delete customer from database: {}", ex.toString());
         }
@@ -75,5 +80,24 @@ public class CustomerDAO  {
             logger.error("Failed to print customer's list: {}", ex.toString());
         }
 
+    }
+
+    public boolean customerExists(String customerEmail){
+
+        boolean result = false;
+        try{
+            ResultSet resultSet = statement.executeQuery("SELECT Email FROM Customers WHERE " +
+                    "EXISTS (SELECT Email FROM Customers " +
+                    "WHERE Email = '"+customerEmail+"')"
+            );
+            if (resultSet.next())
+                result = true;
+            else
+                result = false;
+
+        }catch(Exception e){
+            logger.error("Unable to search this customer in table Customers: {}", e.toString());
+        }
+        return result;
     }
 }

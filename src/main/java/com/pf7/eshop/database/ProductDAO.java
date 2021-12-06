@@ -41,7 +41,17 @@ public class ProductDAO {
         }
     }
 
-    public void delete() {
+    public void delete(int deletedID) {
+
+        try{
+            int result = statement.executeUpdate("DELETE FROM Product WHERE ProductID = '"+deletedID+"' ");
+            if(result == 1)
+                logger.info("Product successfully deleted from database");
+            else
+                logger.info("Product not found");
+        }catch(Exception e){
+            logger.error("Failed to delete product from database {}", e.toString());
+        }
 
     }
 
@@ -66,5 +76,20 @@ public class ProductDAO {
         }
 
         return result;
+    }
+
+    public void showProductTable(){
+
+        try{
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM Product");
+
+            while(resultSet.next()){
+                logger.info("ProductID: {}, ProductName: {}, Price: {}",
+                        resultSet.getInt("ProductId"), resultSet.getString("Name"),
+                        resultSet.getBigDecimal("Price"));
+            }
+        }catch(Exception e){
+            logger.error("Failed to print product's list {}", e.toString());
+        }
     }
 }

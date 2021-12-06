@@ -65,6 +65,10 @@ public class ProductService {
 //    }
 
     private void deleteProduct() {
+        productDAO.showProductTable();
 
+        logger.info("Please give product's ID that you want to delete: ");
+        int deletedID = scanner.nextInt();
+        productDAO.delete(deletedID);
     }
 }

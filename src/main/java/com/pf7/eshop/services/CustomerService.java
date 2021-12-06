@@ -85,6 +85,11 @@ public class CustomerService {
         logger.info("Please give customer's email:");
         customer.setEmail(scanner.next());
 
+        while (customerDAO.customerExists(customer.getEmail()) == true){
+            logger.info("The customer that you want to insert already exists. Give another customer email: ");
+            customer.setEmail(scanner.next());
+        }
+
         customerDAO.insert(customer);
     }
 

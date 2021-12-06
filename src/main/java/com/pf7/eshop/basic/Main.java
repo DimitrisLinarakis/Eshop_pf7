@@ -33,7 +33,7 @@ public class Main {
             logger.info("2. Products list");
             logger.info("3. Orders list");
             logger.info("4. Reports");
-            logger.info("5. Exit\n");
+            logger.info("5. Exit");
 
             switch (scanner.nextInt()) {
                 case 1 -> {
