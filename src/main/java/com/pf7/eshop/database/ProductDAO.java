@@ -63,7 +63,7 @@ public class ProductDAO {
     public void showProductTable(){
 
         try{
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM Product");
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM Products");
 
             while(resultSet.next()){
                 logger.info("ProductID: {}, ProductName: {}, Price: {}",

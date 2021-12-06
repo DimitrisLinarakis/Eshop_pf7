@@ -42,7 +42,7 @@ public class StarterDAO {
         try {
             int result = statement.executeUpdate("CREATE TABLE IF NOT EXISTS Products(" +
                     " productId INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT," +
-                    " name VARCHAR(20) NOT NULL default ''," +
+                    " name VARCHAR(40) NOT NULL default ''," +
                     " price DECIMAL(7, 2) NOT NULL" +
                     ");"
             );
@@ -85,4 +85,5 @@ public class StarterDAO {
             logger.error("Create Order Items Table Error : {}", ex.toString());
         }
     }
+
 }
