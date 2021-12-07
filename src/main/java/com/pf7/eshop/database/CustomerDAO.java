@@ -62,7 +62,7 @@ public class CustomerDAO  {
                         resultSet.getString("Email"));
 
             }
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             logger.error("Failed to print customer's list: {}", ex.toString());
         }
 
@@ -75,12 +75,21 @@ public class CustomerDAO  {
             ResultSet resultSet = statement.executeQuery("SELECT CustomerID, CustomerCategory " +
                     "FROM CUSTOMERS WHERE CustomerId = '"+customerID+"'");
             while (resultSet.next()) {
-                        customer.setCustomerID(resultSet.getInt("CustomerID"));
-                        customer.setCustomerCategory(resultSet.getObject("CustomerCategory", CustomerCategory.class));
-                        break;
+                CustomerCategory cat = null;
+                if (resultSet.getString("CustomerCategory").equals("B2B")){
+                    cat = CustomerCategory.B2B;
+                }else if (resultSet.getString("CustomerCategory").equals("B2C")){
+                    cat = CustomerCategory.B2C;
+                }else if (resultSet.getString("CustomerCategory").equals("B2G")){
+                    cat = CustomerCategory.B2G;
+                }
+                
+                customer.setCustomerID(resultSet.getInt("CustomerID"));
+                customer.setCustomerCategory(cat);
             }
-        } catch (Exception ex) {
-            logger.error("Failed to print customer's list: {}", ex.toString());
+            
+        } catch (SQLException ex) {
+            logger.error("Failed to get customer by ID: {}", ex.toString());
         }
         return customer;
     }
