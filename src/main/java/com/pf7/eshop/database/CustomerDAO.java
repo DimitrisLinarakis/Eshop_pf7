@@ -1,10 +1,13 @@
 package com.pf7.eshop.database;
 
 import com.pf7.eshop.models.Customer;
+import com.pf7.eshop.models.CustomerCategory;
 import com.pf7.eshop.services.DatabaseService;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
+import java.util.ArrayList;
+
 import org.slf4j.Logger;
 
 public class CustomerDAO  {
@@ -57,11 +60,29 @@ public class CustomerDAO  {
                         resultSet.getString("Name"),
                         resultSet.getString("Surname"),
                         resultSet.getString("Email"));
+
             }
         } catch (Exception ex) {
             logger.error("Failed to print customer's list: {}", ex.toString());
         }
 
+    }
+
+    public Customer getCustomersByID(int customerID) {
+
+        Customer customer = new Customer();
+        try {
+            ResultSet resultSet = statement.executeQuery("SELECT CustomerID, CustomerCategory " +
+                    "FROM CUSTOMERS WHERE CustomerId = '"+customerID+"'");
+            while (resultSet.next()) {
+                        customer.setCustomerID(resultSet.getInt("CustomerID"));
+                        customer.setCustomerCategory(resultSet.getObject("CustomerCategory", CustomerCategory.class));
+                        break;
+            }
+        } catch (Exception ex) {
+            logger.error("Failed to print customer's list: {}", ex.toString());
+        }
+        return customer;
     }
 
     public boolean customerExists(String customerEmail){

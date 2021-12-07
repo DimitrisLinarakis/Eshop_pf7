@@ -5,6 +5,7 @@ import com.pf7.eshop.services.DatabaseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.math.BigDecimal;
 import java.sql.*;
 
 public class ProductDAO {
@@ -73,5 +74,19 @@ public class ProductDAO {
         }catch(Exception e){
             logger.error("Failed to print product's list {}", e.toString());
         }
+    }
+
+    public BigDecimal getProductPriceByID(int productid) {
+
+        try{
+            ResultSet resultSet = statement.executeQuery("SELECT Price FROM Products WHERE ProductID = '"+productid+"'");
+
+            while(resultSet.next()){
+                return resultSet.getBigDecimal("Price");
+            }
+        }catch(Exception e){
+            logger.error("Failed to get product price {}", e.toString());
+        }
+        return BigDecimal.valueOf(0);
     }
 }
