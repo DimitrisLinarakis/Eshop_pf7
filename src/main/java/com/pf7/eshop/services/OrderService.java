@@ -71,10 +71,10 @@ public class OrderService {
 
             productlist.add(ordersItem);
 
-            logger.info("Do you want to continue Y/N:");
+            logger.info("Do you want to add another product? Y/N:");
             productSelection = scanner.next();
 
-        }while(!productSelection.toUpperCase(Locale.ROOT).startsWith("Y"));
+        }while(!productSelection.toUpperCase(Locale.ROOT).startsWith("N"));
 
         BigDecimal totalPrice = BigDecimal.valueOf(0);
         for(OrderItems i:  productlist){
