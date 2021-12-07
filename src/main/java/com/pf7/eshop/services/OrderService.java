@@ -3,14 +3,13 @@ package com.pf7.eshop.services;
 import com.pf7.eshop.database.CustomerDAO;
 import com.pf7.eshop.database.OrderDAO;
 import com.pf7.eshop.database.ProductDAO;
-import com.pf7.eshop.models.Customer;
-import com.pf7.eshop.models.OrderItems;
-import com.pf7.eshop.models.Orders;
+import com.pf7.eshop.models.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class OrderService {
@@ -26,7 +25,7 @@ public class OrderService {
             orderDAO = new OrderDAO();
             customerDAO = new CustomerDAO();
             productDAO = new ProductDAO();
-            productlist = new ArrayList<OrderItems>();
+            productlist = new ArrayList<>();
         } catch (Exception e) {
             logger.error("Error : {}", e.toString());
         }
@@ -58,7 +57,7 @@ public class OrderService {
 
         logger.info("Please select product:\n");
         productDAO.showProductTable();
-        String productSelection = "N";
+        String productSelection;
         do{
             logger.info("Give product id: \n");
             int id = scanner.nextInt();
@@ -72,25 +71,57 @@ public class OrderService {
 
             productlist.add(ordersItem);
 
-
             logger.info("Do you want to continue Y/N:");
             productSelection = scanner.next();
 
-        }while(!productSelection.equals("Y"));
+        }while(!productSelection.toUpperCase(Locale.ROOT).startsWith("Y"));
 
-        BigDecimal price = productDAO.getProductPriceByID(id);
+        BigDecimal totalPrice = BigDecimal.valueOf(0);
         for(OrderItems i:  productlist){
-
+            totalPrice = totalPrice.add(productDAO.getProductPriceByID(i.getProductId()).multiply(BigDecimal.valueOf(i.getQuantity())));
         }
         Orders orders = new Orders();
         orders.setCustomerId(customerID);
 
-        Customer customer = new Customer();
-        customer = customerDAO.getCustomersByID(customerID);
+        Customer tempCustomer = new Customer();
+        tempCustomer = customerDAO.getCustomersByID(customerID);
 
-        orders.setC
-        orderDAO.insert(orders);
+        logger.info("Select payment method: \n1. Wire transfer \n2. Credit Card");
+        int method = scanner.nextInt();
 
+        int percentage = 0;
+        if (tempCustomer.getCustomerCategory() == CustomerCategory.B2B){
+            percentage = 20;
+        }else if (tempCustomer.getCustomerCategory() == CustomerCategory.B2G){
+            percentage = 50;
+        }
+
+        if (method == 1) {
+            percentage += 10;
+            orders.setPaymentMethod(PaymentMethod.WireTransfer);
+        }else {
+            percentage += 15;
+            orders.setPaymentMethod(PaymentMethod.CreditTransfer);
+        }
+
+        totalPrice = totalPrice.subtract((totalPrice.multiply(BigDecimal.valueOf(percentage))).divide(BigDecimal.valueOf(100)));
+        orders.setTotalPrice(totalPrice);
+
+        int orderID = orderDAO.insert(orders);
+
+        if (orderID != 0) {
+            for (OrderItems i : productlist) {
+                i.setOrderId(orderID);
+            }
+
+            for (OrderItems i : productlist) {
+                orderDAO.insertOrderItems(i);
+            }
+
+            logger.info("Order successfully added!");
+        }else{
+            logger.error("Order error!");
+        }
     }
 
     private void deleteOrder() {

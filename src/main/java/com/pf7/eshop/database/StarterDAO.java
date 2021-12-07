@@ -57,7 +57,6 @@ public class StarterDAO {
         try {
             int result = statement.executeUpdate("CREATE TABLE IF NOT EXISTS Orders(" +
                     " orderId INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT," +
-                    " productsId INTEGER, FOREIGN KEY (productsId) REFERENCES PRODUCT(PRODUCTID)," +
                     " customerId  INTEGER, FOREIGN KEY (customerId) REFERENCES CUSTOMERS(CUSTOMERID)," +
                     " paymentMethod VARCHAR(30) NOT NULL default ''," +
                     " totalPrice  DECIMAL(7, 2) NOT NULL" +
