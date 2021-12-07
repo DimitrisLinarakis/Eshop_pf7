@@ -28,7 +28,7 @@ public class CustomerDAO  {
                     "'"+customer.getEmail()+"')"
             );
             logger.info("Customer successfully added to database");
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             logger.error("Failed to insert customer's into database: {}", ex.toString());
         }
     }
@@ -44,7 +44,7 @@ public class CustomerDAO  {
                 logger.info("Customer successfully deleted from database");
             else
                 logger.info("Customer not found");
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             logger.error("Failed to delete customer from database: {}", ex.toString());
         }
     }
@@ -104,7 +104,7 @@ public class CustomerDAO  {
             );
             result = resultSet.next();
 
-        }catch(Exception e){
+        }catch(SQLException e){
             logger.error("Unable to search this customer in table Customers: {}", e.toString());
         }
         return result;

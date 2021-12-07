@@ -23,7 +23,7 @@ public class ProductDAO {
                     "VALUES ('" + product.getName() + "', " +
                     "'" + product.getPrice() + "')"
             );
-        } catch (Exception e) {
+        } catch (SQLException e) {
             logger.error("Failed to insert product's into database: {}", e.toString());
         }
     }
@@ -36,7 +36,7 @@ public class ProductDAO {
                 logger.info("Product successfully deleted from database");
             else
                 logger.info("Product not found");
-        }catch(Exception e){
+        }catch(SQLException e){
             logger.error("Failed to delete product from database {}", e.toString());
         }
 
@@ -53,7 +53,7 @@ public class ProductDAO {
         try{
             ResultSet resultSet = statement.executeQuery("SELECT Name FROM Products WHERE EXISTS (SELECT Name FROM Products WHERE Name = '"+productName+"' )");
             result = resultSet.next();
-        } catch (Exception e) {
+        } catch (SQLException e) {
             logger.error("Unable to search this product in table products: {}", e.toString());
 
         }
@@ -71,7 +71,7 @@ public class ProductDAO {
                         resultSet.getInt("ProductId"), resultSet.getString("Name"),
                         resultSet.getBigDecimal("Price"));
             }
-        }catch(Exception e){
+        }catch(SQLException e){
             logger.error("Failed to print product's list {}", e.toString());
         }
     }
@@ -84,7 +84,7 @@ public class ProductDAO {
             while(resultSet.next()){
                 return resultSet.getBigDecimal("Price");
             }
-        }catch(Exception e){
+        }catch(SQLException e){
             logger.error("Failed to get product price {}", e.toString());
         }
         return BigDecimal.valueOf(0);

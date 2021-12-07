@@ -42,7 +42,7 @@ public class OrderService {
             switch (scanner.nextInt()){
                 case 1 -> insertOrder();
                 case 2 -> deleteOrder();
-                case 3 -> OrderDAO.showProductTable();
+                case 3 -> OrderDAO.showOrdersTable();
                 case 4 -> {return;}
                 default -> logger.info("Please give a valid category!");
             }

@@ -4,6 +4,7 @@ import com.pf7.eshop.services.DatabaseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.SQLException;
 import java.sql.Statement;
 
 public class StarterDAO {
@@ -33,7 +34,7 @@ public class StarterDAO {
             );
 
             logger.error("Customers Table Created : {}", result);
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             logger.error("Create Customers Table Error : {}", ex.toString());
         }
     }
@@ -48,7 +49,7 @@ public class StarterDAO {
             );
 
             logger.info("Product Table Created : {}", result);
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             logger.error("Create Product Table Error : {}", ex.toString());
         }
     }
@@ -64,7 +65,7 @@ public class StarterDAO {
             );
 
             logger.error("Orders Table Created : {}", result);
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             logger.error("Create Orders Table Error : {}", ex.toString());
         }
     }
@@ -80,7 +81,7 @@ public class StarterDAO {
             );
 
             logger.error("Order Items Table Created : {}", result);
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             logger.error("Create Order Items Table Error : {}", ex.toString());
         }
     }

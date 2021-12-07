@@ -26,7 +26,7 @@ public class OrderDAO {
 
             if (rs.next())
                 return rs.getInt(1);
-        }catch (Exception e){
+        }catch (SQLException e){
             logger.error("Failed to insert order to database: {}", e.toString());
         }
 
@@ -37,11 +37,11 @@ public class OrderDAO {
         try {
             statement.executeUpdate("INSERT INTO OrderItems (productsId, orderId, quantity) " +
                     "VALUES ('"+orderItem.getProductId()+"', '"+orderItem.getOrderId()+"', '"+orderItem.getQuantity()+"')");
-        }catch (Exception e){
+        }catch (SQLException e){
             logger.error("Failed to insert order to database: {}", e.toString());
         }
     }
 
-    public static void showProductTable() {
+    public static void showOrdersTable() {
     }
 }
