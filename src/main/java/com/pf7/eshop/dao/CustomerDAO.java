@@ -61,6 +61,7 @@ public class CustomerDAO  {
                         resultSet.getString("Email"));
 
             }
+            logger.info("\n");
         } catch (SQLException ex) {
             logger.error("Failed to print customer's list: {}", ex.toString());
         }
