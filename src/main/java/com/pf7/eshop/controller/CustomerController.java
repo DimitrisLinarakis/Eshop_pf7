@@ -1,52 +1,24 @@
-package com.pf7.eshop.service;
+package com.pf7.eshop.controller;
 
-import com.pf7.eshop.database.CustomerDAO;
+import com.pf7.eshop.dao.CustomerDAO;
 import com.pf7.eshop.model.Customer;
 import com.pf7.eshop.model.CustomerCategory;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Scanner;
-import org.slf4j.Logger;
 
-public class CustomerService {
+public class CustomerController {
 
-    private static final Logger logger = LoggerFactory.getLogger(CustomerService.class);
+    private static final Logger logger = LoggerFactory.getLogger(CustomerController.class);
     private CustomerDAO customerDAO;
-    Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner = new Scanner(System.in);
 
-    public CustomerService() {
-        try {
+    public CustomerController() {
             customerDAO = new CustomerDAO();
-        } catch (Exception e) {
-            logger.error("Error : {}", e.toString());
-        }
     }
 
-    public void createCustomerMenu() {
-
-        logger.info("Please, select category: ");
-
-        do {
-            logger.info("1. Insert Customer");
-            logger.info("2. Update Customer");
-            logger.info("3. Delete Customer");
-            logger.info("4. Show Customers list");
-            logger.info("5. Return To Menu");
-
-            switch (scanner.nextInt()) {
-                case 1 -> insertCustomer();
-//                case 2 -> updateCustomer();
-                case 3 -> deleteCustomer();
-                case 4 -> customerDAO.showCostumersTable();
-                case 5 -> {
-                    return;
-                }
-                default -> logger.info("Please, give a valid category!");
-            }
-        } while (true);
-    }
-
-    private void insertCustomer() {
+    public void insertCustomer() {
         Customer customer = new Customer();
 
         String choice;
@@ -81,9 +53,11 @@ public class CustomerService {
         }else{
             logger.info("Please give business name:");
             customer.setName(scanner.next());
+            customer.setSurname(" ");
         }
 
-        logger.info("Please give customer's email:");
+        scanner.nextLine();
+        logger.info("Please give email:");
         customer.setEmail(scanner.next());
 
         while (customerDAO.customerExists(customer.getEmail())){
@@ -94,15 +68,19 @@ public class CustomerService {
         customerDAO.insert(customer);
     }
 
+    public void showCustomersTable(){
+        customerDAO.showCustomersTable();
+    }
+
 //    private void updateCustomer() {
 //        Customer customer = new Customer();
 //
 //        customerDAO.update(customer);
 //    }
 
-    private void deleteCustomer() {
+    public void deleteCustomer() {
 
-        customerDAO.showCostumersTable();
+        customerDAO.showCustomersTable();
 
         logger.info("Please give customer's ID that you want to delete: ");
         int deletedID = scanner.nextInt();

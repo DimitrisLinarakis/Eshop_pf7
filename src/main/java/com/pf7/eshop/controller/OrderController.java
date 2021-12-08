@@ -1,8 +1,8 @@
-package com.pf7.eshop.service;
+package com.pf7.eshop.controller;
 
-import com.pf7.eshop.database.CustomerDAO;
-import com.pf7.eshop.database.OrderDAO;
-import com.pf7.eshop.database.ProductDAO;
+import com.pf7.eshop.dao.CustomerDAO;
+import com.pf7.eshop.dao.OrderDAO;
+import com.pf7.eshop.dao.ProductDAO;
 import com.pf7.eshop.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,15 +12,15 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Scanner;
 
-public class OrderService {
-    private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
+public class OrderController {
+    private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
     private OrderDAO orderDAO;
     private CustomerDAO customerDAO;
     private ProductDAO productDAO;
     private ArrayList<OrderItems> productlist;
     private final Scanner scanner = new Scanner(System.in);
 
-    public OrderService(){
+    public OrderController() {
         try {
             orderDAO = new OrderDAO();
             customerDAO = new CustomerDAO();
@@ -31,47 +31,31 @@ public class OrderService {
         }
     }
 
-    public void createOrderMenu() {
-        do{
-            logger.info("Please, select category: ");
-            logger.info("1. Insert order.");
-            logger.info("2. Delete order.");
-            logger.info("3. Show order list.");
-            logger.info("4. Return to menu.");
-
-            switch (scanner.nextInt()){
-                case 1 -> insertOrder();
-                case 2 -> deleteOrder();
-                case 3 -> OrderDAO.showOrdersTable();
-                case 4 -> {return;}
-                default -> logger.info("Please give a valid category!");
-            }
-        }while(true);
-    }
-
-    private void insertOrder() {
+    public void insertOrder() {
 
         int customerID;
         boolean customerExists;
 
+        customerDAO.showCustomersTable();
+        logger.info("Please select customer id:\n");
         do {
-            logger.info("\nPlease select customer id:\n");
-            customerDAO.showCostumersTable();
             customerID = scanner.nextInt();
-            customerExists= customerDAO.customerExists(customerID);
+            customerExists = customerDAO.customerExists(customerID);
 
-        }while(!customerExists);
+            if (!customerExists)
+                logger.info("Please select valid customer id:\n");
+        } while (!customerExists);
 
         logger.info("Please select product:\n");
         productDAO.showProductTable();
         String productSelection = "Y";
-        do{
+        do {
             logger.info("Give product id: \n");
 
             int id = scanner.nextInt();
             boolean productExists = productDAO.productExists(id);
 
-            if (!productExists){
+            if (!productExists) {
                 continue;
             }
 
@@ -87,14 +71,14 @@ public class OrderService {
             logger.info("Do you want to add another product? Y/N: ");
             productSelection = scanner.next();
 
-            while (!productSelection.toUpperCase(Locale.ROOT).startsWith("N") || !productSelection.toUpperCase(Locale.ROOT).startsWith("Y")){
+            while (!productSelection.toUpperCase(Locale.ROOT).startsWith("N") && !productSelection.toUpperCase(Locale.ROOT).startsWith("Y")) {
                 logger.info("Invalid choice...Do you want to add another product? Y/N: ");
                 productSelection = scanner.next();
             }
-        }while(!productSelection.toUpperCase(Locale.ROOT).startsWith("N"));
+        } while (!productSelection.toUpperCase(Locale.ROOT).startsWith("N"));
 
         BigDecimal totalPrice = BigDecimal.valueOf(0);
-        for(OrderItems i:  productlist){
+        for (OrderItems i : productlist) {
             totalPrice = totalPrice.add(productDAO.getProductPriceByID(i.getProductId()).multiply(BigDecimal.valueOf(i.getQuantity())));
         }
         Orders orders = new Orders();
@@ -107,16 +91,16 @@ public class OrderService {
         int method = scanner.nextInt();
 
         int percentage = 0;
-        if (tempCustomer.getCustomerCategory() == CustomerCategory.B2B){
+        if (tempCustomer.getCustomerCategory() == CustomerCategory.B2B) {
             percentage = 20;
-        }else if (tempCustomer.getCustomerCategory() == CustomerCategory.B2G){
+        } else if (tempCustomer.getCustomerCategory() == CustomerCategory.B2G) {
             percentage = 50;
         }
 
         if (method == 1) {
             percentage += 10;
             orders.setPaymentMethod(PaymentMethod.WireTransfer);
-        }else {
+        } else {
             percentage += 15;
             orders.setPaymentMethod(PaymentMethod.CreditTransfer);
         }
@@ -136,12 +120,48 @@ public class OrderService {
             }
 
             logger.info("Order successfully added!");
-        }else{
+        } else {
             logger.error("Order error!");
         }
     }
 
-    private void deleteOrder() {
+    public void deleteOrder() {
+
+        orderDAO.showOrdersTable();
+        int deletedID;
+        boolean orderExists;
+
+        logger.info("Please give order's ID you want to delete: ");
+        do {
+            deletedID = scanner.nextInt();
+            orderExists = orderDAO.orderExists(deletedID);
+            String exitSelection;
+
+            if (!orderExists) {
+                logger.info("Please give valid order's ID you want to delete: ");
+            } else {
+                logger.info("Are you sure you want to delete the order Y/N? ");
+                exitSelection= scanner.next();
+
+                while (!exitSelection.toUpperCase(Locale.ROOT).startsWith("N") && !exitSelection.toUpperCase(Locale.ROOT).startsWith("Y")) {
+                    logger.info("Invalid choice...Are you sure you want to delete the order Y/N? ");
+                    exitSelection = scanner.next();
+                }
+
+                if (exitSelection.toUpperCase(Locale.ROOT).startsWith("Y")) {
+                    orderDAO.deleteOrder(deletedID);
+                    break;
+                }
+
+            }
+        } while (!orderExists);
+
     }
+
+
+    public void showOrderTable() {
+        orderDAO.showOrdersTable();
+    }
+
 
 }

@@ -1,6 +1,6 @@
-package com.pf7.eshop.database;
+package com.pf7.eshop.dao;
 
-import com.pf7.eshop.service.DatabaseService;
+import com.pf7.eshop.controller.DatabaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,7 +12,7 @@ public class StarterDAO {
     private static final Logger logger = LoggerFactory.getLogger(StarterDAO.class);
 
     public StarterDAO() {
-        this.statement = DatabaseService.getStatement();
+        this.statement = DatabaseController.getStatement();
     }
 
     public void createTables() {

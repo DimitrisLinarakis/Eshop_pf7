@@ -1,8 +1,8 @@
-package com.pf7.eshop.database;
+package com.pf7.eshop.dao;
 
 import com.pf7.eshop.model.Customer;
 import com.pf7.eshop.model.CustomerCategory;
-import com.pf7.eshop.service.DatabaseService;
+import com.pf7.eshop.controller.DatabaseController;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
@@ -15,7 +15,7 @@ public class CustomerDAO  {
     private static final Logger logger = LoggerFactory.getLogger(CustomerDAO.class);
 
     public CustomerDAO() {
-        this.statement = DatabaseService.getStatement();
+        this.statement = DatabaseController.getStatement();
     }
 
     public void insert(Customer customer) {
@@ -48,10 +48,10 @@ public class CustomerDAO  {
         }
     }
 
-    public void showCostumersTable() {
+    public void showCustomersTable() {
         try {
             ResultSet resultSet = statement.executeQuery("SELECT * FROM CUSTOMERS");
-            Customer customer = new Customer();
+
             while (resultSet.next()) {
                 logger.info("CustomerID: {}, CustomerCategory:{}, Name:{}, Surname: {}, Email: {}",
                         resultSet.getInt("CustomerID"),

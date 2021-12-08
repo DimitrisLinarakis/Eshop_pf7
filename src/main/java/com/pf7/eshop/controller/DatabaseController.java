@@ -1,4 +1,4 @@
-package com.pf7.eshop.service;
+package com.pf7.eshop.controller;
 
 import org.h2.tools.Server;
 import org.slf4j.Logger;
@@ -9,8 +9,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class DatabaseService {
-    private static final Logger logger = LoggerFactory.getLogger(DatabaseService.class);
+public class DatabaseController {
+    private static final Logger logger = LoggerFactory.getLogger(DatabaseController.class);
 
     private static final String DB_CONNECTION_URL_MEMORY_MODE = "jdbc:h2:./eshopDB";
     private static final String DB_USERNAME = "sa";

@@ -1,11 +1,9 @@
 package com.pf7.eshop.basic;
 
-import com.pf7.eshop.database.StarterDAO;
-import com.pf7.eshop.service.DatabaseService;
-import com.pf7.eshop.service.CustomerService;
-import com.pf7.eshop.service.OrderService;
-import com.pf7.eshop.service.ProductService;
-import com.pf7.eshop.service.ReportServices;
+import com.pf7.eshop.controller.DatabaseController;
+import com.pf7.eshop.dao.StarterDAO;
+import com.pf7.eshop.view.*;
+import com.pf7.eshop.view.OrderView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +17,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         try{
-            DatabaseService.createConnection();
+            DatabaseController.createConnection();
             StarterDAO starterDAO = new StarterDAO();
             starterDAO.createTables();
         } catch(Exception e) {
@@ -41,23 +39,23 @@ public class Main {
 
             switch (scanner.nextInt()) {
                 case 1 -> {
-                    CustomerService customerService = new CustomerService();
+                    CustomerView customerService = new CustomerView();
                     customerService.createCustomerMenu();
                 }
                 case 2 -> {
-                    ProductService productService = new ProductService();
+                    ProductView productService = new ProductView();
                     productService.createProductMenu();
                 }
                 case 3 -> {
-                    OrderService orderService = new OrderService();
+                    OrderView orderService = new OrderView();
                     orderService.createOrderMenu();
                 }
                 case 4 -> {
-                    ReportServices reportServices = new ReportServices();
+                    ReportView reportServices = new ReportView();
                 }
                 case 5 -> {
                     logger.info("We are sorry that you have to leave...Goodbye!\n");
-                    DatabaseService.stopServer();
+                    DatabaseController.stopServer();
                     System.exit(0);
                     //stop server, shutdown
                 }
