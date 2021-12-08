@@ -18,8 +18,18 @@ public class GlobalController {
     }
 
 
-    public static void addPendingOrder(Orders order) {
+    //========================================================================//
+    //                      Order Getter - Setter                             //
+
+    public static int addPendingOrder(Orders order) {
+        order.setOrderId(pendingOrderItemsList.size() + 1);
         pendingOrdersList.add(order);
+
+        logger.info("Order Added To Cart!!! \n");
+        pendingOrdersList.forEach(orders -> logger.info("Order Id : {}, Total Price : {}, Customer Id : {}, Payment Method : {}",
+                orders.getOrderId(),orders.getTotalPrice(),orders.getCustomerId(),orders.getPaymentMethod()));
+
+        return pendingOrdersList.get((pendingOrdersList.size() - 1)).getOrderId();
     }
 
     public static Orders getPendingOrderByCustomerId(int customerId) {
@@ -30,9 +40,30 @@ public class GlobalController {
         return null;
     }
 
+    public static void deletePendingOrderByOrder(Orders order) {
+        try {
+            pendingOrdersList.removeIf(orders -> orders.getOrderId() == order.getOrderId());
+            pendingOrdersList.forEach(orders -> logger.info("Order Id : {} , Customer Id : {} ",orders.getOrderId(),orders.getCustomerId()));
+        } catch (Exception ex) {
+            logger.error("Error Remove Pending Order {}", ex.toString());
+        }
+    }
 
-    public static void addPendingOrderItems(OrderItems orderItem) {
-        pendingOrderItemsList.add(orderItem);
+
+    //========================================================================//
+    //                      Order Items Getter - Setter                       //
+
+    public static void addPendingOrderItems(ArrayList<OrderItems> orderItems,int orderId) {
+
+        for(OrderItems item :orderItems){
+            item.setOrderId(orderId);
+            pendingOrderItemsList.add(item);
+        }
+
+        logger.info("OrderItems Added To Cart!!! \n");
+        pendingOrderItemsList.forEach(orderItems1 -> logger.info("Order Id : {}, Product Id : {}, Quantity : {}",
+                orderItems1.getOrderId(),orderItems1.getProductId(),orderItems1.getQuantity()));
+
     }
 
     public static ArrayList<OrderItems> getPendingOrderItemsByOrderId(int orderId) {
@@ -45,18 +76,9 @@ public class GlobalController {
         return orderItemsList;
     }
 
-    public static void deletePendingOrderByOrderItem(Orders order) {
-        try {
-            pendingOrdersList.remove(order);
-            pendingOrdersList.forEach(orders -> logger.info("Order Id : {} , Customer Id : {} ",orders.getOrderId(),orders.getCustomerId()));
-        } catch (Exception ex) {
-            logger.error("Error Remove Pending Order {}", ex.toString());
-        }
-    }
-
     public static void deletePendingOrderItemsByOrderItemList(ArrayList<OrderItems> orderItems) {
         try {
-            pendingOrderItemsList.removeAll(orderItems);
+            orderItems.forEach(orderItems1 -> pendingOrderItemsList.removeIf(orderItems2 -> orderItems2.getOrderId() == orderItems1.getOrderId()));
             pendingOrderItemsList.forEach(orderItems1 -> logger.info("Order Id : {} , Order Item Id : {} ",orderItems1.getOrderId(),orderItems1.getOrderItemsId()));
         } catch (Exception ex) {
             logger.error("Error Remove Pending Order {}", ex.toString());

@@ -17,7 +17,6 @@ public class OrderController {
     private OrderDAO orderDAO;
     private CustomerDAO customerDAO;
     private ProductDAO productDAO;
-    private ArrayList<OrderItems> productlist;
     private final Scanner scanner = new Scanner(System.in);
 
     public OrderController() {
@@ -25,7 +24,7 @@ public class OrderController {
             orderDAO = new OrderDAO();
             customerDAO = new CustomerDAO();
             productDAO = new ProductDAO();
-            productlist = new ArrayList<>();
+
         } catch (Exception e) {
             logger.error("Error : {}", e.toString());
         }
@@ -33,6 +32,7 @@ public class OrderController {
 
     public void insertOrder() {
 
+        ArrayList<OrderItems> productList = new ArrayList<>();
         int customerID;
         boolean customerExists;
         Orders orders = new Orders();
@@ -51,13 +51,13 @@ public class OrderController {
         Orders pendingOrder;
         pendingOrder = GlobalController.getPendingOrderByCustomerId(customerID);
 
-        if(pendingOrder != null){
+        if (pendingOrder != null) {
             logger.info("You have a pending Order!!!You want to continue checkout Y/N?? \n");
 
             checkoutPendingOrder = scanner.next();
 
             while (!checkoutPendingOrder.toUpperCase(Locale.ROOT).startsWith("N") && !checkoutPendingOrder.toUpperCase(Locale.ROOT).startsWith("Y")) {
-                logger.info("Invalid Choice...You have a pending Order!!!You want to continue checkout Y/N?? : ");
+                logger.info("Invalid Choice...You have a pending Order!!!You want to continue checkout Y/N?? ");
                 checkoutPendingOrder = scanner.next();
             }
         }
@@ -65,17 +65,22 @@ public class OrderController {
 
         if (checkoutPendingOrder.toUpperCase(Locale.ROOT).startsWith("Y") && (pendingOrder != null)) {
             orders = pendingOrder;
-            productlist = GlobalController.getPendingOrderItemsByOrderId(orders.getOrderId());
+            productList = GlobalController.getPendingOrderItemsByOrderId(orders.getOrderId());
+
+            insertOrderAndOrderItems(orders,productList);
+            GlobalController.deletePendingOrderByOrder(pendingOrder);
+            GlobalController.deletePendingOrderItemsByOrderItemList(productList);
         } else {
 
-            if (pendingOrder != null){
-                GlobalController.deletePendingOrderByOrderItem(pendingOrder);
-                GlobalController.deletePendingOrderItemsByOrderItemList(productlist);
+            if (pendingOrder != null) {
+                GlobalController.deletePendingOrderByOrder(pendingOrder);
+                GlobalController.deletePendingOrderItemsByOrderItemList(productList);
             }
 
             logger.info("Please select product:\n");
             productDAO.showProductTable();
             String productSelection = "Y";
+
             do {
                 logger.info("Give product id: \n");
 
@@ -93,7 +98,7 @@ public class OrderController {
                 ordersItem.setProductId(id);
                 ordersItem.setQuantity(quantity);
 
-                productlist.add(ordersItem);
+                productList.add(ordersItem);
 
                 logger.info("Do you want to add another product? Y/N: ");
                 productSelection = scanner.next();
@@ -105,7 +110,7 @@ public class OrderController {
             } while (!productSelection.toUpperCase(Locale.ROOT).startsWith("N"));
 
             BigDecimal totalPrice = BigDecimal.valueOf(0);
-            for (OrderItems i : productlist) {
+            for (OrderItems i : productList) {
                 totalPrice = totalPrice.add(productDAO.getProductPriceByID(i.getProductId()).multiply(BigDecimal.valueOf(i.getQuantity())));
             }
 
@@ -135,19 +140,37 @@ public class OrderController {
             totalPrice = totalPrice.subtract((totalPrice.multiply(BigDecimal.valueOf(percentage))).divide(BigDecimal.valueOf(100)));
             orders.setTotalPrice(totalPrice);
 
+
+            logger.info("You want to continue checkout Y/N?? ");
+            checkoutPendingOrder = scanner.next();
+
+            while (!checkoutPendingOrder.toUpperCase(Locale.ROOT).startsWith("N") && !checkoutPendingOrder.toUpperCase(Locale.ROOT).startsWith("Y")) {
+                logger.info("Invalid Choice...You want to continue checkout Y/N??  ");
+                checkoutPendingOrder = scanner.next();
+            }
+
+
+            if(checkoutPendingOrder.toUpperCase(Locale.ROOT).startsWith("Y")){
+                insertOrderAndOrderItems(orders,productList);
+            }else{
+                int orderId = GlobalController.addPendingOrder(orders);
+                GlobalController.addPendingOrderItems(productList,orderId);
+            }
+
         }
 
-        // Prepei na valoume ena check gia an thelei na stamatisei to checkout kai na apothikeusoume sta pending lists ta items.
-        //{   }
+    }
+
+    private void insertOrderAndOrderItems(Orders orders,ArrayList<OrderItems> productList){
 
         int orderID = orderDAO.insert(orders);
 
         if (orderID != 0) {
-            for (OrderItems i : productlist) {
+            for (OrderItems i : productList) {
                 i.setOrderId(orderID);
             }
 
-            for (OrderItems i : productlist) {
+            for (OrderItems i : productList) {
                 orderDAO.insertOrderItems(i);
             }
 
