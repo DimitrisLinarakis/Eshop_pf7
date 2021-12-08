@@ -32,6 +32,11 @@ public class DatabaseService {
     }
 
     public static void stopServer(){
+        try {
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         server.stop();
         server.shutdown();
         logger.info("H2 server has been shutdown.");
