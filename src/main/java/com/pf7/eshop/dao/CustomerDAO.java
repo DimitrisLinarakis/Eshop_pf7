@@ -124,4 +124,15 @@ public class CustomerDAO  {
         }
         return result;
     }
+
+    public void showCustomerCategories(){
+
+        CustomerCategory customerCategory;
+        int counter = 1;
+
+        for (CustomerCategory category : CustomerCategory.values()){
+            logger.info(counter + category.toString());
+        }
+
+    }
 }

@@ -52,6 +52,7 @@ public class Main {
                 }
                 case 4 -> {
                     ReportView reportServices = new ReportView();
+                    reportServices.createReportMenu();
                 }
                 case 5 -> {
                     logger.info("We are sorry that you have to leave...Goodbye!\n");
