@@ -26,18 +26,19 @@ public class Main {
             logger.error("Error {}", e.toString());
             System.exit(0);
         }
-
+        logger.info("\n");
         logger.info("=========================");
         logger.info("Welcome to Eshop");
         logger.info("=========================\n");
 
         do{
-            logger.info("Please, select category: ");
-            logger.info("1. Customers list");
-            logger.info("2. Products list");
-            logger.info("3. Orders list");
+            logger.info("1. Customers menu");
+            logger.info("2. Products menu");
+            logger.info("3. Orders menu");
             logger.info("4. Reports");
-            logger.info("5. Exit");
+            logger.info("5. Exit\n");
+
+            logger.info("Please, select category: ");
 
             switch (scanner.nextInt()) {
                 case 1 -> {

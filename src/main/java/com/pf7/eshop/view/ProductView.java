@@ -17,18 +17,19 @@ public class ProductView {
 
     public void createProductMenu() {
         do{
-            logger.info("Please, select category: ");
             logger.info("1. Insert product.");
             logger.info("2. Delete product.");
             logger.info("3. Show product list.");
-            logger.info("4. Return to menu.");
+            logger.info("4. Return to menu.\n");
+
+            logger.info("Please, select category: ");
 
             switch (scanner.nextInt()){
                 case 1 -> productController.insertProduct();
                 case 2 -> productController.deleteProduct();
                 case 3 -> productController.showProductsTable();
                 case 4 -> {return;}
-                default -> logger.info("Please give a valid category!");
+                default -> logger.info("Please select a valid category!");
             }
         }while(true);
 

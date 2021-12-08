@@ -18,12 +18,13 @@ public class ReportView {
 
     public void createReportMenu() {
         do {
-            logger.info("Please, select category: ");
             logger.info("1. Select Total number and cost of purchases for a particular customer.");
             logger.info("2. Select Total number and cost of purchases per customer category.");
             logger.info("3. Select Total number and cost of purchases per payment method.");
             logger.info("4. Select The customer(s) who purchased the most expensive product and how many times.");
-            logger.info("5. Return to menu.");
+            logger.info("5. Return to menu.\n");
+
+            logger.info("Please, select category: ");
 
             switch (scanner.nextInt()) {
                 case 1 -> reportController.previewReportPerParticularCustomer();
@@ -33,7 +34,7 @@ public class ReportView {
                 case 5-> {
                     return;
                 }
-                default -> logger.info("Please give a valid category!");
+                default -> logger.info("Please select a valid category!");
             }
         } while (true);
     }
