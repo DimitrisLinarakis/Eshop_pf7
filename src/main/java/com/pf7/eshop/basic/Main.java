@@ -1,6 +1,7 @@
 package com.pf7.eshop.basic;
 
 import com.pf7.eshop.controller.DatabaseController;
+import com.pf7.eshop.controller.GlobalController;
 import com.pf7.eshop.dao.StarterDAO;
 import com.pf7.eshop.view.*;
 import com.pf7.eshop.view.OrderView;
@@ -20,6 +21,7 @@ public class Main {
             DatabaseController.createConnection();
             StarterDAO starterDAO = new StarterDAO();
             starterDAO.createTables();
+            GlobalController globalController = new GlobalController();
         } catch(Exception e) {
             logger.error("Error {}", e.toString());
             System.exit(0);

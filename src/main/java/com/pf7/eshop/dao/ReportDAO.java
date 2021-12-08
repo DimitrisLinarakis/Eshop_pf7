@@ -13,27 +13,30 @@ public class ReportDAO {
     private final Statement statement;
     private static final Logger logger = LoggerFactory.getLogger(OrderDAO.class);
 
-    public ReportDAO(){
+    public ReportDAO() {
         this.statement = DatabaseController.getStatement();
     }
-
 
 
     public void getPreviewReportPerParticularCustomer(int CustomerId) {
         try {
             ResultSet resultSet = statement.executeQuery("select C.NAME,C.SURNAME,count(*) as TotalCount,Round(sum(TOTALPRICE),2) as Total from ORDERS ord " +
                     "inner join CUSTOMERS C on ord.CUSTOMERID = C.CUSTOMERID " +
-                    "where ord.CUSTOMERID = '"+CustomerId+"'" +
+                    "where ord.CUSTOMERID = '" + CustomerId + "'" +
                     "group by C.NAME, C.SURNAME " +
                     "order BY Total DESC;");
 
-            while (resultSet.next()) {
-                logger.info("Total And Cost Per Particular Customer -> Name : {}, Surname:{}, Total Number :{}, Cost Of Purchases : {}",
-                        resultSet.getString("NAME"),
-                        resultSet.getString("SURNAME"),
-                        resultSet.getInt("TotalCount"),
-                        resultSet.getBigDecimal("Total"));
+            if (resultSet.next()) {
+                while (resultSet.next()) {
+                    logger.info("Total And Cost Per Particular Customer -> Name : {}, Surname:{}, Total Number :{}, Cost Of Purchases : {}",
+                            resultSet.getString("NAME"),
+                            resultSet.getString("SURNAME"),
+                            resultSet.getInt("TotalCount"),
+                            resultSet.getBigDecimal("Total"));
 
+                }
+            } else {
+                logger.error("No Data \n");
             }
         } catch (SQLException ex) {
             logger.error("Failed to print Report Per Particular Customer : {}", ex.toString());
@@ -48,12 +51,16 @@ public class ReportDAO {
                     "group BY C.CUSTOMERCATEGORY " +
                     "order by Total DESC;");
 
-            while (resultSet.next()) {
-                logger.info("Category {} -> Total Number :{}, Cost Of Purchases : {} ",
-                        resultSet.getString("CustomerCategory"),
-                        resultSet.getInt("TotalCount"),
-                        resultSet.getBigDecimal("Total"));
+            if (resultSet.next()) {
+                while (resultSet.next()) {
+                    logger.info("Category {} -> Total Number :{}, Cost Of Purchases : {} ",
+                            resultSet.getString("CustomerCategory"),
+                            resultSet.getInt("TotalCount"),
+                            resultSet.getBigDecimal("Total"));
 
+                }
+            } else {
+                logger.error("No Data \n");
             }
         } catch (SQLException ex) {
             logger.error("Failed to print Report Per Customer Category: {} ", ex.toString());
@@ -67,12 +74,16 @@ public class ReportDAO {
                     "GROUP BY ord.PAYMENTMETHOD " +
                     "order by Total DESC;");
 
-            while (resultSet.next()) {
-                logger.info("Payment Method {} -> Total Number :{}, Cost Of Purchases : {} ",
-                        resultSet.getString("PaymentMethod"),
-                        resultSet.getInt("TotalCount"),
-                        resultSet.getBigDecimal("Total"));
+            if (resultSet.next()) {
+                while (resultSet.next()) {
+                    logger.info("Payment Method {} -> Total Number :{}, Cost Of Purchases : {} ",
+                            resultSet.getString("PaymentMethod"),
+                            resultSet.getInt("TotalCount"),
+                            resultSet.getBigDecimal("Total"));
 
+                }
+            } else {
+                logger.error("No Data \n");
             }
         } catch (SQLException ex) {
             logger.error("Failed to print Report Per Payment Method: {} ", ex.toString());
@@ -90,15 +101,19 @@ public class ReportDAO {
                     "group by pr.PRICE,pr.PRODUCTID,C.CUSTOMERID,pr.NAME " +
                     "order by PRICE DESC;");
 
-            while (resultSet.next()) {
-                logger.info("Most Expensive Products ->Customer Id : {} , Name : {} , Surname : {} , Product Name : {} , Price : {}, Products Purchases : {} ",
-                        resultSet.getInt("CustomerId"),
-                        resultSet.getString("Name"),
-                        resultSet.getString("Surname"),
-                        resultSet.getString("PrName"),
-                        resultSet.getBigDecimal("MostExpensiveProductPrice"),
-                        resultSet.getInt("ProductPurchases"));
+            if (resultSet.next()) {
+                while (resultSet.next()) {
+                    logger.info("Most Expensive Products ->Customer Id : {} , Name : {} , Surname : {} , Product Name : {} , Price : {}, Products Purchases : {} ",
+                            resultSet.getInt("CustomerId"),
+                            resultSet.getString("Name"),
+                            resultSet.getString("Surname"),
+                            resultSet.getString("PrName"),
+                            resultSet.getBigDecimal("MostExpensiveProductPrice"),
+                            resultSet.getInt("ProductPurchases"));
 
+                }
+            } else {
+                logger.error("No Data \n");
             }
         } catch (SQLException ex) {
             logger.error("Failed to print Customer Report By Most Expensive Product: {} ", ex.toString());

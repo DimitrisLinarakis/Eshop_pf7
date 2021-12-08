@@ -35,6 +35,8 @@ public class OrderController {
 
         int customerID;
         boolean customerExists;
+        Orders orders = new Orders();
+        String checkoutPendingOrder = "N";
 
         customerDAO.showCustomersTable();
         logger.info("Please select customer id:\n");
@@ -46,67 +48,97 @@ public class OrderController {
                 logger.info("Please select valid customer id:\n");
         } while (!customerExists);
 
-        logger.info("Please select product:\n");
-        productDAO.showProductTable();
-        String productSelection = "Y";
-        do {
-            logger.info("Give product id: \n");
+        Orders pendingOrder;
+        pendingOrder = GlobalController.getPendingOrderByCustomerId(customerID);
 
-            int id = scanner.nextInt();
-            boolean productExists = productDAO.productExists(id);
+        if(pendingOrder != null){
+            logger.info("You have a pending Order!!!You want to continue checkout Y/N?? \n");
 
-            if (!productExists) {
-                continue;
+            checkoutPendingOrder = scanner.next();
+
+            while (!checkoutPendingOrder.toUpperCase(Locale.ROOT).startsWith("N") && !checkoutPendingOrder.toUpperCase(Locale.ROOT).startsWith("Y")) {
+                logger.info("Invalid Choice...You have a pending Order!!!You want to continue checkout Y/N?? : ");
+                checkoutPendingOrder = scanner.next();
             }
-
-            logger.info("Give product quantity: \n");
-            int quantity = scanner.nextInt();
-
-            OrderItems ordersItem = new OrderItems();
-            ordersItem.setProductId(id);
-            ordersItem.setQuantity(quantity);
-
-            productlist.add(ordersItem);
-
-            logger.info("Do you want to add another product? Y/N: ");
-            productSelection = scanner.next();
-
-            while (!productSelection.toUpperCase(Locale.ROOT).startsWith("N") && !productSelection.toUpperCase(Locale.ROOT).startsWith("Y")) {
-                logger.info("Invalid choice...Do you want to add another product? Y/N: ");
-                productSelection = scanner.next();
-            }
-        } while (!productSelection.toUpperCase(Locale.ROOT).startsWith("N"));
-
-        BigDecimal totalPrice = BigDecimal.valueOf(0);
-        for (OrderItems i : productlist) {
-            totalPrice = totalPrice.add(productDAO.getProductPriceByID(i.getProductId()).multiply(BigDecimal.valueOf(i.getQuantity())));
-        }
-        Orders orders = new Orders();
-        orders.setCustomerId(customerID);
-
-        var tempCustomer = new Customer();
-        tempCustomer = customerDAO.getCustomersByID(customerID);
-
-        logger.info("Select payment method: \n1. Wire transfer \n2. Credit Card");
-        int method = scanner.nextInt();
-
-        int percentage = 0;
-        if (tempCustomer.getCustomerCategory() == CustomerCategory.B2B) {
-            percentage = 20;
-        } else if (tempCustomer.getCustomerCategory() == CustomerCategory.B2G) {
-            percentage = 50;
         }
 
-        if (method == 1) {
-            percentage += 10;
-            orders.setPaymentMethod(PaymentMethod.WireTransfer);
+
+        if (checkoutPendingOrder.toUpperCase(Locale.ROOT).startsWith("Y") && (pendingOrder != null)) {
+            orders = pendingOrder;
+            productlist = GlobalController.getPendingOrderItemsByOrderId(orders.getOrderId());
         } else {
-            percentage += 15;
-            orders.setPaymentMethod(PaymentMethod.CreditTransfer);
+
+            if (pendingOrder != null){
+                GlobalController.deletePendingOrderByOrderItem(pendingOrder);
+                GlobalController.deletePendingOrderItemsByOrderItemList(productlist);
+            }
+
+            logger.info("Please select product:\n");
+            productDAO.showProductTable();
+            String productSelection = "Y";
+            do {
+                logger.info("Give product id: \n");
+
+                int id = scanner.nextInt();
+                boolean productExists = productDAO.productExists(id);
+
+                if (!productExists) {
+                    continue;
+                }
+
+                logger.info("Give product quantity: \n");
+                int quantity = scanner.nextInt();
+
+                OrderItems ordersItem = new OrderItems();
+                ordersItem.setProductId(id);
+                ordersItem.setQuantity(quantity);
+
+                productlist.add(ordersItem);
+
+                logger.info("Do you want to add another product? Y/N: ");
+                productSelection = scanner.next();
+
+                while (!productSelection.toUpperCase(Locale.ROOT).startsWith("N") && !productSelection.toUpperCase(Locale.ROOT).startsWith("Y")) {
+                    logger.info("Invalid choice...Do you want to add another product? Y/N: ");
+                    productSelection = scanner.next();
+                }
+            } while (!productSelection.toUpperCase(Locale.ROOT).startsWith("N"));
+
+            BigDecimal totalPrice = BigDecimal.valueOf(0);
+            for (OrderItems i : productlist) {
+                totalPrice = totalPrice.add(productDAO.getProductPriceByID(i.getProductId()).multiply(BigDecimal.valueOf(i.getQuantity())));
+            }
+
+            orders.setCustomerId(customerID);
+
+            var tempCustomer = new Customer();
+            tempCustomer = customerDAO.getCustomersByID(customerID);
+
+            logger.info("Select payment method: \n1. Wire transfer \n2. Credit Card");
+            int method = scanner.nextInt();
+
+            int percentage = 0;
+            if (tempCustomer.getCustomerCategory() == CustomerCategory.B2B) {
+                percentage = 20;
+            } else if (tempCustomer.getCustomerCategory() == CustomerCategory.B2G) {
+                percentage = 50;
+            }
+
+            if (method == 1) {
+                percentage += 10;
+                orders.setPaymentMethod(PaymentMethod.WireTransfer);
+            } else {
+                percentage += 15;
+                orders.setPaymentMethod(PaymentMethod.CreditTransfer);
+            }
+
+            totalPrice = totalPrice.subtract((totalPrice.multiply(BigDecimal.valueOf(percentage))).divide(BigDecimal.valueOf(100)));
+            orders.setTotalPrice(totalPrice);
+
         }
 
-        totalPrice = totalPrice.subtract((totalPrice.multiply(BigDecimal.valueOf(percentage))).divide(BigDecimal.valueOf(100)));
-        orders.setTotalPrice(totalPrice);
+        // Prepei na valoume ena check gia an thelei na stamatisei to checkout kai na apothikeusoume sta pending lists ta items.
+        //{   }
 
         int orderID = orderDAO.insert(orders);
 
@@ -141,7 +173,7 @@ public class OrderController {
                 logger.info("Please give valid order's ID you want to delete: ");
             } else {
                 logger.info("Are you sure you want to delete the order Y/N? ");
-                exitSelection= scanner.next();
+                exitSelection = scanner.next();
 
                 while (!exitSelection.toUpperCase(Locale.ROOT).startsWith("N") && !exitSelection.toUpperCase(Locale.ROOT).startsWith("Y")) {
                     logger.info("Invalid choice...Are you sure you want to delete the order Y/N? ");

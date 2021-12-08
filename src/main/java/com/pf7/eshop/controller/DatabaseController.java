@@ -1,5 +1,7 @@
 package com.pf7.eshop.controller;
 
+import com.pf7.eshop.model.OrderItems;
+import com.pf7.eshop.model.Orders;
 import org.h2.tools.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +10,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public class DatabaseController {
     private static final Logger logger = LoggerFactory.getLogger(DatabaseController.class);
