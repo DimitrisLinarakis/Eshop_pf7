@@ -1,13 +1,14 @@
 package com.pf7.eshop.basic;
 
 import com.pf7.eshop.database.StarterDAO;
-import com.pf7.eshop.services.DatabaseService;
-import com.pf7.eshop.services.CustomerService;
-import com.pf7.eshop.services.OrderService;
-import com.pf7.eshop.services.ProductService;
-import com.pf7.eshop.services.ReportServices;
+import com.pf7.eshop.service.DatabaseService;
+import com.pf7.eshop.service.CustomerService;
+import com.pf7.eshop.service.OrderService;
+import com.pf7.eshop.service.ProductService;
+import com.pf7.eshop.service.ReportServices;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.util.Scanner;
 
 public class Main {

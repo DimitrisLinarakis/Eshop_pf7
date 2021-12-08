@@ -1,7 +1,7 @@
-package com.pf7.eshop.services;
+package com.pf7.eshop.service;
 
 import com.pf7.eshop.database.ProductDAO;
-import com.pf7.eshop.models.Products;
+import com.pf7.eshop.model.Products;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

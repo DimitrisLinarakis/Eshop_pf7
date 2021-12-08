@@ -1,4 +1,4 @@
-package com.pf7.eshop.services;
+package com.pf7.eshop.service;
 
 import org.h2.tools.Server;
 import org.slf4j.Logger;

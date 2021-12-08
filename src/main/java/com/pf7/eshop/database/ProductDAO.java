@@ -1,7 +1,7 @@
 package com.pf7.eshop.database;
 
-import com.pf7.eshop.models.Products;
-import com.pf7.eshop.services.DatabaseService;
+import com.pf7.eshop.model.Products;
+import com.pf7.eshop.service.DatabaseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -88,5 +88,20 @@ public class ProductDAO {
             logger.error("Failed to get product price {}", e.toString());
         }
         return BigDecimal.valueOf(0);
+    }
+
+    public boolean productExists(int id) {
+        boolean result = false;
+        try{
+            ResultSet resultSet = statement.executeQuery("SELECT ProductsId FROM Products WHERE " +
+                    "EXISTS (SELECT ProductId FROM Products " +
+                    "WHERE ProductsId = '"+id+"')"
+            );
+            result = resultSet.next();
+
+        }catch(SQLException e){
+            logger.error("Unable to search this product in table Products: {}", e.toString());
+        }
+        return result;
     }
 }

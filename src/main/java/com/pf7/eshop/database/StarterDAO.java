@@ -1,6 +1,6 @@
 package com.pf7.eshop.database;
 
-import com.pf7.eshop.services.DatabaseService;
+import com.pf7.eshop.service.DatabaseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

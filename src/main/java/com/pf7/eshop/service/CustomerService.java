@@ -1,8 +1,8 @@
-package com.pf7.eshop.services;
+package com.pf7.eshop.service;
 
 import com.pf7.eshop.database.CustomerDAO;
-import com.pf7.eshop.models.Customer;
-import com.pf7.eshop.models.CustomerCategory;
+import com.pf7.eshop.model.Customer;
+import com.pf7.eshop.model.CustomerCategory;
 import org.slf4j.LoggerFactory;
 
 import java.util.Scanner;

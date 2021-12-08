@@ -1,12 +1,11 @@
 package com.pf7.eshop.database;
 
-import com.pf7.eshop.models.Customer;
-import com.pf7.eshop.models.CustomerCategory;
-import com.pf7.eshop.services.DatabaseService;
+import com.pf7.eshop.model.Customer;
+import com.pf7.eshop.model.CustomerCategory;
+import com.pf7.eshop.service.DatabaseService;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
-import java.util.ArrayList;
 
 import org.slf4j.Logger;
 
@@ -52,7 +51,7 @@ public class CustomerDAO  {
     public void showCostumersTable() {
         try {
             ResultSet resultSet = statement.executeQuery("SELECT * FROM CUSTOMERS");
-
+            Customer customer = new Customer();
             while (resultSet.next()) {
                 logger.info("CustomerID: {}, CustomerCategory:{}, Name:{}, Surname: {}, Email: {}",
                         resultSet.getInt("CustomerID"),
@@ -101,6 +100,22 @@ public class CustomerDAO  {
             ResultSet resultSet = statement.executeQuery("SELECT Email FROM Customers WHERE " +
                     "EXISTS (SELECT Email FROM Customers " +
                     "WHERE Email = '"+customerEmail+"')"
+            );
+            result = resultSet.next();
+
+        }catch(SQLException e){
+            logger.error("Unable to search this customer in table Customers: {}", e.toString());
+        }
+        return result;
+    }
+
+    public boolean customerExists(int id){
+
+        boolean result = false;
+        try{
+            ResultSet resultSet = statement.executeQuery("SELECT CustomerId FROM Customers WHERE " +
+                    "EXISTS (SELECT CustomerId FROM Customers " +
+                    "WHERE CustomerId = '"+id+"')"
             );
             result = resultSet.next();
 

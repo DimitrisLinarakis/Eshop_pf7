@@ -1,4 +1,4 @@
-package com.pf7.eshop.models;
+package com.pf7.eshop.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

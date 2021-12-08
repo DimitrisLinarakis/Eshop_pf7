@@ -1,9 +1,9 @@
-package com.pf7.eshop.services;
+package com.pf7.eshop.service;
 
 import com.pf7.eshop.database.CustomerDAO;
 import com.pf7.eshop.database.OrderDAO;
 import com.pf7.eshop.database.ProductDAO;
-import com.pf7.eshop.models.*;
+import com.pf7.eshop.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,16 +51,29 @@ public class OrderService {
 
     private void insertOrder() {
 
-        logger.info("Please select customer:\n");
-        customerDAO.showCostumersTable();
-        int customerID = scanner.nextInt();
+        int customerID;
+        boolean customerExists;
+
+        do {
+            logger.info("\nPlease select customer id:\n");
+            customerDAO.showCostumersTable();
+            customerID = scanner.nextInt();
+            customerExists= customerDAO.customerExists(customerID);
+
+        }while(!customerExists);
 
         logger.info("Please select product:\n");
         productDAO.showProductTable();
-        String productSelection;
+        String productSelection = "Y";
         do{
             logger.info("Give product id: \n");
+
             int id = scanner.nextInt();
+            boolean productExists = productDAO.productExists(id);
+
+            if (!productExists){
+                continue;
+            }
 
             logger.info("Give product quantity: \n");
             int quantity = scanner.nextInt();
@@ -71,9 +84,13 @@ public class OrderService {
 
             productlist.add(ordersItem);
 
-            logger.info("Do you want to add another product? Y/N:");
+            logger.info("Do you want to add another product? Y/N: ");
             productSelection = scanner.next();
 
+            while (!productSelection.toUpperCase(Locale.ROOT).startsWith("N") || !productSelection.toUpperCase(Locale.ROOT).startsWith("Y")){
+                logger.info("Invalid choice...Do you want to add another product? Y/N: ");
+                productSelection = scanner.next();
+            }
         }while(!productSelection.toUpperCase(Locale.ROOT).startsWith("N"));
 
         BigDecimal totalPrice = BigDecimal.valueOf(0);
@@ -83,7 +100,7 @@ public class OrderService {
         Orders orders = new Orders();
         orders.setCustomerId(customerID);
 
-        Customer tempCustomer = new Customer();
+        var tempCustomer = new Customer();
         tempCustomer = customerDAO.getCustomersByID(customerID);
 
         logger.info("Select payment method: \n1. Wire transfer \n2. Credit Card");

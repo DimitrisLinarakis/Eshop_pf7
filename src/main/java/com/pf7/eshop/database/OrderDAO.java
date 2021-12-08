@@ -1,8 +1,8 @@
 package com.pf7.eshop.database;
 
-import com.pf7.eshop.models.OrderItems;
-import com.pf7.eshop.models.Orders;
-import com.pf7.eshop.services.DatabaseService;
+import com.pf7.eshop.model.OrderItems;
+import com.pf7.eshop.model.Orders;
+import com.pf7.eshop.service.DatabaseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
