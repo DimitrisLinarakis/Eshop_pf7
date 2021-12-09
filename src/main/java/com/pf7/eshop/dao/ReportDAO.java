@@ -92,12 +92,13 @@ public class ReportDAO {
     public void getPreviewReportCustomerByMostExpensiveProduct() {
         try {
             ResultSet resultSet = statement.executeQuery(" " +
-                    "select C.NAME,C.SURNAME,C.CUSTOMERID,pr.NAME,MAX(pr.PRICE) as MostExpensiveProductPrice,count(pr.PRODUCTID) as ProductPurchases,pr.NAME as PrName from ORDERITEMS ordI " +
-                    "inner join PRODUCTS pr on pr.PRODUCTID = ordI.PRODUCTSID " +
-                    "inner join ORDERS O on ordI.ORDERID = O.ORDERID " +
-                    "inner join CUSTOMERS C on C.CUSTOMERID = O.CUSTOMERID " +
-                    "group by pr.PRICE,pr.PRODUCTID,C.CUSTOMERID,pr.NAME " +
-                    "order by PRICE DESC;");
+                    "SELECT P.NAME,P.PRICE,C.NAME,C.SURNAME,C.CUSTOMERID,SUM(ORDI.QUANTITY) as QUANTITY,P.PRODUCTID FROM ORDERITEMS ORDI " +
+                    "INNER JOIN PRODUCTS P on ORDI.PRODUCTSID = P.PRODUCTID " +
+                    "INNER JOIN ORDERS O on O.ORDERID = ORDI.ORDERID " +
+                    "INNER JOIN CUSTOMERS C on C.CUSTOMERID = O.CUSTOMERID " +
+                    "WHERE P.PRICE = (SELECT MAX(pr.PRICE) FROM PRODUCTS pr inner join ORDERITEMS ordI on pr.PRODUCTID = ordI.PRODUCTSID) " +
+                    "GROUP BY P.NAME, P.PRICE,C.CUSTOMERID,C.NAME,P.PRODUCTID " +
+                    "ORDER BY SUM(ORDI.QUANTITY) DESC;");
 
             if (resultSet.next()) {
                 do {
@@ -105,9 +106,9 @@ public class ReportDAO {
                             resultSet.getInt("CustomerId"),
                             resultSet.getString("Name"),
                             resultSet.getString("Surname"),
-                            resultSet.getString("PrName"),
-                            resultSet.getBigDecimal("MostExpensiveProductPrice"),
-                            resultSet.getInt("ProductPurchases"));
+                            resultSet.getString("Name"),
+                            resultSet.getBigDecimal("Price"),
+                            resultSet.getInt("Quantity"));
 
                 }while (resultSet.next());
             } else {
