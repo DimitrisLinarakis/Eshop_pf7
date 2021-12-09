@@ -21,6 +21,8 @@ public class Main {
             DatabaseController.createConnection();
             StarterDAO starterDAO = new StarterDAO();
             starterDAO.createTables();
+
+
             GlobalController globalController = new GlobalController();
         } catch(Exception e) {
             logger.error("Error {}", e.toString());

@@ -25,15 +25,15 @@ public class ReportDAO {
                     "group by C.NAME, C.SURNAME " +
                     "order BY Total DESC;");
 
-            if (resultSet.getFetchSize() > 0) {
-                while (resultSet.next()) {
+            if (resultSet.next()) {
+                do {
                     logger.info("Total And Cost Per Particular Customer -> Name : {}, Surname:{}, Total Number :{}, Cost Of Purchases : {}",
                             resultSet.getString("Name"),
                             resultSet.getString("Surname"),
                             resultSet.getInt("TotalCount"),
                             resultSet.getBigDecimal("Total"));
 
-                }
+                }while (resultSet.next());
             } else {
                 logger.error("No Data \n");
             }
@@ -50,21 +50,20 @@ public class ReportDAO {
                     "group BY C.CUSTOMERCATEGORY " +
                     "order by Total DESC;");
 
-            if (resultSet.getFetchSize() > 0) {
-                while (resultSet.next()) {
+            if (resultSet.next()) {
+                do {
                     logger.info("Category {} -> Total Number :{}, Cost Of Purchases : {} ",
                             resultSet.getString("Category"),
                             resultSet.getInt("TotalCount"),
                             resultSet.getBigDecimal("Total"));
 
-                }
+                }while (resultSet.next());
             } else {
                 logger.error("No Data \n");
             }
         } catch (SQLException ex) {
             logger.error("Failed to print Report Per Customer Category: {} ", ex.toString());
         }
-
     }
 
     public void getPreviewReportPerPaymentMethod() {
@@ -73,14 +72,14 @@ public class ReportDAO {
                     "GROUP BY ord.PAYMENTMETHOD " +
                     "order by Total DESC;");
 
-            if (resultSet.getFetchSize() > 0) {
-                while (resultSet.next()) {
+            if (resultSet.next()) {
+                do {
                     logger.info("Payment Method {} -> Total Number :{}, Cost Of Purchases : {} ",
                             resultSet.getString("Method"),
                             resultSet.getInt("TotalCount"),
                             resultSet.getBigDecimal("Total"));
 
-                }
+                }while (resultSet.next());
             } else {
                 logger.error("No Data \n");
             }
@@ -100,8 +99,8 @@ public class ReportDAO {
                     "group by pr.PRICE,pr.PRODUCTID,C.CUSTOMERID,pr.NAME " +
                     "order by PRICE DESC;");
 
-            if (resultSet.getFetchSize() > 0) {
-                while (resultSet.next()) {
+            if (resultSet.next()) {
+                do {
                     logger.info("Most Expensive Products ->Customer Id : {} , Name : {} , Surname : {} , Product Name : {} , Price : {}, Products Purchases : {} ",
                             resultSet.getInt("CustomerId"),
                             resultSet.getString("Name"),
@@ -110,7 +109,7 @@ public class ReportDAO {
                             resultSet.getBigDecimal("MostExpensiveProductPrice"),
                             resultSet.getInt("ProductPurchases"));
 
-                }
+                }while (resultSet.next());
             } else {
                 logger.error("No Data \n");
             }
