@@ -34,7 +34,7 @@ public class ReportView {
                 case 5-> {
                     return;
                 }
-                default -> logger.info("Please select a valid category!");
+                default -> logger.info("Please select a valid category!\n");
             }
         } while (true);
     }
