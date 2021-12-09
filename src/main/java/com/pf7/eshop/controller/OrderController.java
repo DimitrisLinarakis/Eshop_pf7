@@ -52,12 +52,12 @@ public class OrderController {
         pendingOrder = GlobalController.getPendingOrderByCustomerId(customerID);
 
         if (pendingOrder != null) {
-            logger.info("You have a pending Order!!!You want to continue checkout Y/N?? \n");
+            logger.info("You have a pending Order!!!Do you want to continue checkout Y/N?? \n");
 
             checkoutPendingOrder = scanner.next();
 
             while (!checkoutPendingOrder.toUpperCase(Locale.ROOT).startsWith("N") && !checkoutPendingOrder.toUpperCase(Locale.ROOT).startsWith("Y")) {
-                logger.info("Invalid Choice...You have a pending Order!!!You want to continue checkout Y/N?? ");
+                logger.info("Invalid Choice...You have a pending Order!!!Do you want to continue checkout Y/N?? \n");
                 checkoutPendingOrder = scanner.next();
             }
         }

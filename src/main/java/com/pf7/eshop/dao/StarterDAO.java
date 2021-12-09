@@ -75,9 +75,9 @@ public class StarterDAO {
 
     private void InsertProductsFromTemp() {
         try{
-            statement.executeUpdate("INSERT INTO PRODUCTS (Name, Price) " +
+            statement.executeUpdate("INSERT INTO Products (Name, Price) " +
                     "SELECT Name, Price FROM Temp "+
-                    "WHERE NOT EXISTS (SELECT Name, Price FROM Products WHERE Products.productId = Temp.ProductId)"
+                    "WHERE NOT EXISTS (SELECT Name, Price FROM Products WHERE Products.name = Temp.name)"
             );
         } catch (SQLException e) {
             logger.error("Failed to insert products from temporary table into database: {}", e.toString());
