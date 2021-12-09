@@ -76,8 +76,14 @@ public class OrderDAO {
                     logger.info("Error delete Order from database");
                 }
             }
-            else
-                logger.info("Order not Found");
+            else {
+                int resultOrderState = statement.executeUpdate("DELETE FROM Orders where OrderId ='" + orderId + "'");
+                if (resultOrderState == 1){
+                    logger.info("Order successfully deleted from database");
+                }else{
+                    logger.info("Error delete Order from database");
+                }
+            }
         } catch (SQLException ex) {
             logger.error("Failed to delete Order from database: {}", ex.toString());
         }
