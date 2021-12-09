@@ -12,7 +12,7 @@ import java.sql.Statement;
 public class DatabaseController {
     private static final Logger logger = LoggerFactory.getLogger(DatabaseController.class);
 
-    private static final String DB_CONNECTION_URL_MEMORY_MODE = "jdbc:h2:./eshopDB";
+    private static final String DB_CONNECTION_URL_MEMORY_MODE = "jdbc:h2:./eshopDB;AUTO_SERVER=TRUE";
     private static final String DB_USERNAME = "sa";
     private static final String DB_PASSWORD = "";
 
