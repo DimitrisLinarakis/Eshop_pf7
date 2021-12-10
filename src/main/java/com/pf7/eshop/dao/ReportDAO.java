@@ -92,7 +92,7 @@ public class ReportDAO {
     public void getPreviewReportCustomerByMostExpensiveProduct() {
         try {
             ResultSet resultSet = statement.executeQuery(" " +
-                    "SELECT P.NAME,P.PRICE,C.NAME,C.SURNAME,C.CUSTOMERID,SUM(ORDI.QUANTITY) as QUANTITY,P.PRODUCTID FROM ORDERITEMS ORDI " +
+                    "SELECT P.NAME,P.PRICE,C.NAME as CustomerName,C.SURNAME,C.CUSTOMERID,SUM(ORDI.QUANTITY) as QUANTITY,P.PRODUCTID FROM ORDERITEMS ORDI " +
                     "INNER JOIN PRODUCTS P on ORDI.PRODUCTSID = P.PRODUCTID " +
                     "INNER JOIN ORDERS O on O.ORDERID = ORDI.ORDERID " +
                     "INNER JOIN CUSTOMERS C on C.CUSTOMERID = O.CUSTOMERID " +
@@ -104,7 +104,7 @@ public class ReportDAO {
                 do {
                     logger.info("Most Expensive Products ->Customer Id : {} , Name : {} , Surname : {} , Product Name : {} , Price : {}, Products Purchases : {} ",
                             resultSet.getInt("CustomerId"),
-                            resultSet.getString("Name"),
+                            resultSet.getString("CustomerName"),
                             resultSet.getString("Surname"),
                             resultSet.getString("Name"),
                             resultSet.getBigDecimal("Price"),

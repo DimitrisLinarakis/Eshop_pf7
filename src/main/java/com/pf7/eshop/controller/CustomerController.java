@@ -1,6 +1,7 @@
 package com.pf7.eshop.controller;
 
 import com.pf7.eshop.dao.CustomerDAO;
+import com.pf7.eshop.dao.OrderDAO;
 import com.pf7.eshop.model.Customer;
 import com.pf7.eshop.model.CustomerCategory;
 import org.slf4j.Logger;
@@ -12,10 +13,12 @@ public class CustomerController {
 
     private static final Logger logger = LoggerFactory.getLogger(CustomerController.class);
     private CustomerDAO customerDAO;
+    private OrderDAO orderDAO;
     private final Scanner scanner = new Scanner(System.in);
 
     public CustomerController() {
             customerDAO = new CustomerDAO();
+            orderDAO = new OrderDAO();
     }
 
     public void insertCustomer() {
@@ -85,7 +88,11 @@ public class CustomerController {
         logger.info("Please give customer's ID that you want to delete: ");
         int deletedID = scanner.nextInt();
 
-
-        customerDAO.delete(deletedID);
+        boolean result = orderDAO.deleteOrderToDeleteCustomerByCustomerId(deletedID);
+        if (result){
+            customerDAO.delete(deletedID);
+        }else{
+            logger.info("Cannot Delete Customer Cause Of Order.");
+        }
     }
 }

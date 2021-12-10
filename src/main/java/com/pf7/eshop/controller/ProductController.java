@@ -1,5 +1,6 @@
 package com.pf7.eshop.controller;
 
+import com.pf7.eshop.dao.OrderDAO;
 import com.pf7.eshop.dao.ProductDAO;
 import com.pf7.eshop.model.Products;
 import org.slf4j.Logger;
@@ -10,11 +11,13 @@ import java.util.Scanner;
 public class ProductController {
     private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
     private ProductDAO productDAO;
+    private OrderDAO orderDAO;
     private final Scanner scanner = new Scanner(System.in).useDelimiter("\n");
 
     public ProductController() {
         try {
             productDAO = new ProductDAO();
+            orderDAO = new OrderDAO();
         } catch (Exception e) {
             logger.error("Error : {}", e.toString());
         }
@@ -27,7 +30,7 @@ public class ProductController {
         product.setName(scanner.next());
 
 
-        while (productDAO.exists(product.getName())){
+        while (productDAO.exists(product.getName())) {
             logger.info("The product that you want to insert already exists. Give another product name: ");
             product.setName(scanner.next());
         }
@@ -49,10 +52,16 @@ public class ProductController {
 
         logger.info("Please give product's ID that you want to delete: ");
         int deletedID = scanner.nextInt();
-        productDAO.delete(deletedID);
+
+        boolean result = orderDAO.deleteOrderItemsByProductId(deletedID);
+        if (result) {
+            productDAO.delete(deletedID);
+        } else {
+            logger.info("Cannot Delete Product Cause Of Order Items.");
+        }
     }
 
-    public void showProductsTable(){
+    public void showProductsTable() {
         productDAO.showProductTable();
     }
 }
