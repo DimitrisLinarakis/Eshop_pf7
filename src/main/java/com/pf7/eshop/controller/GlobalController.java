@@ -22,7 +22,7 @@ public class GlobalController {
     //                      Order Getter - Setter                             //
 
     public static int addPendingOrder(Orders order) {
-        order.setOrderId(pendingOrderItemsList.size() + 1);
+        order.setOrderId(pendingOrdersList.size() + 1);
         pendingOrdersList.add(order);
 
         logger.info("Order Added To Cart!!! \n");
@@ -76,10 +76,15 @@ public class GlobalController {
         return orderItemsList;
     }
 
-    public static void deletePendingOrderItemsByOrderItemList(ArrayList<OrderItems> orderItems) {
+    public static void deletePendingOrderItemsByOrderItemList(int orderId) {
         try {
-            orderItems.forEach(orderItems1 -> pendingOrderItemsList.removeIf(orderItems2 -> orderItems2.getOrderId() == orderItems1.getOrderId()));
-            pendingOrderItemsList.forEach(orderItems1 -> logger.info("Order Id : {} , Order Item Id : {} ",orderItems1.getOrderId(),orderItems1.getOrderItemsId()));
+            pendingOrderItemsList.removeIf(orderItems -> orderItems.getOrderId() == orderId);
+
+            for(OrderItems j : pendingOrderItemsList){
+                logger.info("Order Id : {} , Order Item Id : {} , Product Id : {} , Quantity : {}",j.getOrderId(),j.getOrderItemsId(),j.getProductId(),j.getQuantity());
+            }
+
+            //pendingOrderItemsList.forEach(orderItems1 -> logger.info("Order Id : {} , Order Item Id : {} ",orderItems1.getOrderId(),orderItems1.getOrderItemsId()));
         } catch (Exception ex) {
             logger.error("Error Remove Pending Order {}", ex.toString());
         }

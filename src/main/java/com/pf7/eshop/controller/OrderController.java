@@ -64,17 +64,22 @@ public class OrderController {
 
 
         if (checkoutPendingOrder.toUpperCase(Locale.ROOT).startsWith("Y") && (pendingOrder != null)) {
+            int pendingOrderId = pendingOrder.getOrderId();
             orders = pendingOrder;
             productList = GlobalController.getPendingOrderItemsByOrderId(orders.getOrderId());
 
             insertOrderAndOrderItems(orders,productList);
+            if (productList.size() > 0){
+                pendingOrderId = productList.get(0).getOrderId();
+            }
             GlobalController.deletePendingOrderByOrder(pendingOrder);
-            GlobalController.deletePendingOrderItemsByOrderItemList(productList);
+            GlobalController.deletePendingOrderItemsByOrderItemList(pendingOrderId);
         } else {
 
             if (pendingOrder != null) {
+                int pendingOrderId = pendingOrder.getOrderId();
                 GlobalController.deletePendingOrderByOrder(pendingOrder);
-                GlobalController.deletePendingOrderItemsByOrderItemList(productList);
+                GlobalController.deletePendingOrderItemsByOrderItemList(pendingOrderId);
             }
 
             logger.info("Please select product:\n");
